@@ -1,2 +1,170 @@
 
-[INSERT THE FULL FINAL HTML FROM THE CANVAS HERE]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poop Savvy Estimate Form</title>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+    }
+    h2 {
+      text-align: center;
+      color: #444;
+    }
+    label {
+      margin-top: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #estimate {
+      margin-top: 20px;
+      font-size: 1.1em;
+      font-weight: 500;
+      color: #333;
+      background: #e8f5e9;
+      padding: 12px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Get Your Poop Savvy Estimate</h2>
+
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" placeholder="Enter your name">
+
+    <label for="zipcode">Your Zip Code:</label>
+    <input type="text" id="zipcode" placeholder="Enter your zip code">
+
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" placeholder="Enter your email">
+
+    <label for="service">Select Service:</label>
+    <select id="service">
+      <option value="">-- Choose a service --</option>
+      <option value="weekly">Weekly Cleanup</option>
+      <option value="twice">Twice-a-Month Cleanup</option>
+      <option value="onetime">One-Time Cleanup</option>
+    </select>
+
+    <label for="dogs">Number of Dogs:</label>
+    <select id="dogs">
+      <option value="">-- Choose number of dogs --</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+    <label for="deodorize">Add Deodorizing & Sanitizing Spray? ($10):</label>
+    <select id="deodorize">
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+
+    <button onclick="getEstimate()">Get Estimate</button>
+    <div id="estimate"></div>
+  </div>
+
+  <script>
+    emailjs.init("PYixL_lI3vvHOjvmi");
+
+    const pricing = {
+      weekly: {1: 75, 2: 85, 3: 95, 4: 105},
+      twice: {1: 45, 2: 55, 3: 65, 4: 75},
+      onetime: {1: 20, 2: 30, 3: 40, 4: 50}
+    };
+
+    const serviceZips = new Set([
+      "75033", "75034", "75035", "75036", "75068", "75023", "75024", "75025", "75074", "75075", "75093", "75094",
+      "75050", "75051", "75052", "75053", "75054", "75104", "75115", "75123", "75116", "75137", "75138", "75134",
+      "75146", "75154", "75165", "75167", "75168", "76001", "76002", "76006", "76010", "76011", "76012", "76013",
+      "76014", "76015", "76016", "76017", "76018", "76040", "76060", "76065", "76063"
+    ]);
+
+    function getEstimate() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const zipcode = document.getElementById("zipcode").value;
+      const service = document.getElementById("service").value;
+      const dogs = document.getElementById("dogs").value;
+      const deodorize = document.getElementById("deodorize").value;
+
+      if (!name || !email || !zipcode || !service || !dogs) {
+        document.getElementById("estimate").innerText = "Please fill out all fields.";
+        return;
+      }
+
+      if (!serviceZips.has(zipcode)) {
+        document.getElementById("estimate").innerText = "Sorry, we do not currently service your zip code.";
+        return;
+      }
+
+      let price = pricing[service][dogs];
+      if (deodorize === "yes") price += 10;
+
+      const estimateText = `Hi ${name}, your estimated price is $${price.toFixed(2)}. We’ll follow up at ${email}.`;
+      document.getElementById("estimate").innerText = estimateText + '
+
+Thank you for your request! If you have any additional questions or concerns, feel free to email us at info@poop-savvy.com.';
+
+      const templateParams = {
+        name: name,
+        email: email,
+        zipcode: zipcode,
+        service: service,
+        dogs: dogs,
+        deodorize: deodorize,
+        estimate: `$${price.toFixed(2)}`
+      };
+
+      emailjs.send("service_qt03754", "template_dfhkd1w", templateParams)
+        .then(() => {
+          console.log("Email sent successfully");
+        }, (error) => {
+          console.error("EmailJS error:", error);
+        });
+    }
+  </script>
+</body>
+</html>
+
