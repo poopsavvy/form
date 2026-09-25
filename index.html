@@ -25,6 +25,7 @@
       --ease: cubic-bezier(.22, 1, .36, 1);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
     html { scroll-behavior: smooth; scroll-padding-top: 84px; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -202,7 +203,7 @@
     .plan .badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--lime); color: var(--ink); font-weight: 700; font-size: .8rem; padding: 6px 14px; border-radius: 999px; animation: tilt 2.6s ease-in-out infinite; white-space: nowrap; }
     @keyframes tilt { 0%, 100% { transform: translateX(-50%) rotate(-3deg); } 50% { transform: translateX(-50%) rotate(3deg); } }
     .plan h3 { font-size: 1.5rem; }
-    .plan .sub { color: var(--muted); margin: 4px 0 20px; }
+    .plan .sub { color: var(--muted); margin: 4px 0 0; }
     .price { font-family: 'Fredoka'; font-size: 3.2rem; font-weight: 700; line-height: 1; }
     .price.quote { font-size: 2rem; }
     .price small { font-family: 'Inter'; font-size: 1rem; font-weight: 500; opacity: .75; }
@@ -260,8 +261,15 @@
     .msg.err { color: #c0392b; animation: shake .4s; }
     .msg.ok { color: var(--green-dark); }
     @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-    .next { display: none; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-    .next.show { display: flex; animation: wordIn .5s var(--ease); }
+    .submit-quote { width: 100%; justify-content: center; margin-top: 22px; }
+    .quote-card { animation: quoteIn .7s var(--ease) both; }
+    .quote-card h3 { font-size: 1.8rem; margin: 6px 0 4px; }
+    @keyframes quoteIn { from { opacity: 0; transform: translateY(30px) scale(.96); } to { opacity: 1; transform: none; } }
+    .quote-lines { list-style: none; display: grid; gap: 8px; margin: 18px 0 22px; }
+    .quote-lines li { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px dashed #e4ece6; }
+    .quote-lines li span { color: var(--muted); }
+    .quote-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .quote-note { color: var(--muted); font-size: .92rem; margin-top: 14px; }
 
     /* ---------- Why ---------- */
     .why-bg { background: var(--green-dark); color: var(--white); overflow: hidden; }
@@ -413,14 +421,14 @@
         <div>
           <span class="pill reveal"><span class="pulse"></span> Family-owned · Serving Southern DFW</span>
           <h1 class="reveal" style="--d:.1s">We scoop the poop.<br>You enjoy the <span class="swap" id="swap"><span>yard.</span></span></h1>
-          <p class="lead reveal" style="--d:.2s">Dependable, affordable dog poop removal that keeps your yard clean, safe and odor-free. $20 a visit, prepaid monthly, no contracts.</p>
+          <p class="lead reveal" style="--d:.2s">Dependable, affordable dog poop removal that keeps your yard clean, safe and odor-free. Prepaid monthly, no contracts.</p>
           <div class="hero-cta reveal" style="--d:.3s">
             <a href="#estimate" class="btn btn-primary">Get my free quote <span class="arrow">→</span></a>
             <a href="#plans" class="btn btn-ghost">See plans</a>
           </div>
           <ul class="hero-checks reveal" style="--d:.4s">
             <li>No contracts</li>
-            <li>$20/visit for 1–2 dogs</li>
+            <li>Free instant quote</li>
             <li>Prepaid monthly</li>
           </ul>
         </div>
@@ -473,7 +481,7 @@
           <div class="step reveal" style="--d:0s">
             <div class="step-num">📋<b>1</b></div>
             <h3>Choose your plan</h3>
-            <p>Weekly or twice a month. See your price instantly below.</p>
+            <p>Weekly, twice a month or one-time. Get your free quote in under a minute.</p>
           </div>
           <div class="step reveal" style="--d:.15s">
             <div class="step-num">📅<b>2</b></div>
@@ -493,49 +501,46 @@
     <section class="block plans-bg" id="plans">
       <div class="wrap">
         <div class="head reveal">
-          <span class="eyebrow">Simple pricing</span>
+          <span class="eyebrow">Our plans</span>
           <h2>Plans that fit your pack</h2>
-          <p>Recurring plans are $20 per visit for 1–2 dogs, plus $5 per visit for each additional dog. Prepaid monthly, no contracts.</p>
+          <p>Pick the schedule that fits your pack. Prepaid monthly, no contracts, and your price is just one quick quote away.</p>
         </div>
         <div class="plans">
           <article class="plan reveal from-left">
             <h3>Twice a Month</h3>
             <p class="sub">Every other week</p>
-            <div class="price">$<span class="count" data-to="20">20</span><small>/visit</small></div>
             <ul>
               <li>Cleanup every other week</li>
               <li>Waste bagged &amp; hauled away</li>
               <li>Prepaid monthly</li>
             </ul>
-            <a href="#estimate" class="btn btn-ghost" data-plan="twice">Choose plan</a>
+            <a href="#estimate" class="btn btn-ghost" data-plan="twice">Get my quote</a>
           </article>
           <article class="plan featured reveal" style="--d:.1s">
             <span class="badge">★ Most popular</span>
             <h3>Weekly</h3>
             <p class="sub">A spotless yard, always</p>
-            <div class="price">$<span class="count" data-to="20">20</span><small>/visit</small></div>
             <ul>
               <li>Cleanup every week</li>
               <li>Waste bagged &amp; hauled away</li>
               <li>Gate check every visit</li>
               <li>Prepaid monthly</li>
             </ul>
-            <a href="#estimate" class="btn btn-primary" data-plan="weekly">Choose plan <span class="arrow">→</span></a>
+            <a href="#estimate" class="btn btn-primary" data-plan="weekly">Get my quote <span class="arrow">→</span></a>
           </article>
           <article class="plan reveal from-right" style="--d:.2s">
             <h3>One-Time</h3>
             <p class="sub">Spring cleanups &amp; parties</p>
-            <div class="price quote">Custom quote</div>
             <ul>
               <li>Single full-yard cleanup</li>
               <li>Priced by yard &amp; buildup</li>
               <li>Perfect before events</li>
               <li>No commitment at all</li>
             </ul>
-            <a href="mailto:info@poop-savvy.com?subject=One-time%20cleanup%20quote" class="btn btn-ghost">Email for pricing</a>
+            <a href="#estimate" class="btn btn-ghost" data-plan="onetime">Request a quote</a>
           </article>
         </div>
-        <p class="plans-note reveal">🐕 Weekly &amp; twice-a-month prices are for 1–2 dogs. Each additional dog is +$5 per visit.<br>🌿 Add a deodorizing &amp; sanitizing spray to any visit for just $10.</p>
+        <p class="plans-note reveal">🌿 Add a deodorizing &amp; sanitizing spray to any visit. Just check the box on your quote.</p>
       </div>
     </section>
 
@@ -544,17 +549,18 @@
       <div class="wrap estimator">
         <div class="estimator-copy reveal from-left">
           <span class="eyebrow">Get your quote</span>
-          <h2>See your price in seconds</h2>
-          <p>Tap your options to see your price, then send us your info. We'll email your payment link and first cleanup date.</p>
+          <h2>Get your free quote</h2>
+          <p>Tell us about your yard and your pups. You'll see your price right away, and if you like it, you can start service in a couple of minutes.</p>
           <ul>
-            <li><span>⚡</span>See your price as you choose</li>
+            <li><span>⚡</span>Your quote in under a minute</li>
             <li><span>📍</span>Instant service-area check</li>
-            <li><span>📨</span>Payment link sent straight to your inbox</li>
+            <li><span>📝</span>Like it? Start service with one quick form</li>
             <li><span>🤝</span>No contracts, cancel anytime</li>
           </ul>
         </div>
 
-        <form class="card reveal from-right" id="estForm" novalidate>
+        <div class="quote-wrap reveal from-right">
+        <form class="card" id="estForm" novalidate>
           <div class="form-grid">
             <div class="field">
               <label for="name">Your name</label>
@@ -590,24 +596,30 @@
               </div>
             </fieldset>
             <label class="toggle field full">
-              <span><strong>Deodorize &amp; sanitize</strong><br><small style="color:var(--muted)">Add fresh, pet-safe spray (+$10)</small></span>
+              <span><strong>Deodorize &amp; sanitize</strong><br><small style="color:var(--muted)">Fresh, pet-safe spray every visit</small></span>
               <input type="checkbox" id="deodorize">
             </label>
           </div>
 
-          <div class="result" id="result" aria-live="polite">
-            <div>
-              <small style="color:var(--muted);font-weight:600">Your estimate</small>
-              <div class="amount" id="amountWrap">$<span id="amount">20</span> <small>/visit</small></div>
-              <small id="billing" style="color:var(--muted)">Prepaid monthly</small>
-            </div>
-            <button type="submit" class="btn btn-primary" id="submitBtn"><span id="submitLabel">Get my quote</span> <span class="arrow">→</span></button>
-          </div>
+          <button type="submit" class="btn btn-primary submit-quote" id="submitBtn"><span id="submitLabel">Get my free quote</span> <span class="arrow">→</span></button>
           <p class="msg" id="msg" aria-live="polite"></p>
-          <div class="next" id="nextSteps">
-            <a class="btn btn-ghost" href="mailto:info@poop-savvy.com">Questions? Email us</a>
-          </div>
         </form>
+
+        <div class="card quote-card" id="quoteCard" hidden aria-live="polite">
+          <span class="eyebrow" id="quoteEyebrow">Your quote</span>
+          <h3 id="quoteHello">Here's your quote</h3>
+          <div class="result" id="result">
+            <div class="amount" id="amountWrap">$<span id="amount">0</span> <small>/visit</small></div>
+            <small id="billing" style="color:var(--muted)">Prepaid monthly · no contracts</small>
+          </div>
+          <ul class="quote-lines" id="quoteLines"></ul>
+          <div class="quote-actions">
+            <a class="btn btn-primary" id="startBtn" href="intake.html">Start service <span class="arrow">→</span></a>
+            <button type="button" class="btn btn-ghost" id="editBtn">Edit my answers</button>
+          </div>
+          <p class="quote-note" id="quoteNote">Next, we'll grab a few details (address, gate access, preferred day) and email your payment link.</p>
+        </div>
+        </div>
       </div>
     </section>
 
@@ -622,7 +634,7 @@
         <div class="features">
           <div class="feature reveal" style="--d:0s"><div class="ico">👨‍👩‍👧</div><h3>Family-owned</h3><p>A local DFW business, not a faceless franchise. You'll always reach a real person.</p></div>
           <div class="feature reveal" style="--d:.1s"><div class="ico">📆</div><h3>Reliable schedule</h3><p>Same day, every visit. We show up so you never have to think about it.</p></div>
-          <div class="feature reveal" style="--d:.2s"><div class="ico">💸</div><h3>Affordable &amp; flexible</h3><p>$20 a visit for 1–2 dogs, prepaid monthly, with zero long-term contracts.</p></div>
+          <div class="feature reveal" style="--d:.2s"><div class="ico">💸</div><h3>Affordable &amp; flexible</h3><p>Simple prepaid monthly billing with zero long-term contracts.</p></div>
           <div class="feature reveal" style="--d:.3s"><div class="ico">🔒</div><h3>Gate-safe</h3><p>We double-check every gate before we leave, so your pups stay put.</p></div>
           <div class="feature reveal" style="--d:.4s"><div class="ico">🧼</div><h3>Clean &amp; sanitary</h3><p>Sanitized tools between yards to help stop the spread of germs and parasites.</p></div>
           <div class="feature reveal" style="--d:.5s"><div class="ico">🌿</div><h3>Odor-free option</h3><p>Add our deodorizing spray for a yard that smells as good as it looks.</p></div>
@@ -630,7 +642,7 @@
         <div class="stats">
           <div class="stat reveal"><b><span class="count" data-to="10">10</span>+</b><span>DFW cities served</span></div>
           <div class="stat reveal" style="--d:.1s"><b><span class="count" data-to="0">0</span></b><span>Contracts required</span></div>
-          <div class="stat reveal" style="--d:.2s"><b>$<span class="count" data-to="20">20</span></b><span>Per visit for 1–2 dogs</span></div>
+          <div class="stat reveal" style="--d:.2s"><b><span class="count" data-to="60">60</span>s</b><span>To get your free quote</span></div>
         </div>
       </div>
     </section>
@@ -684,10 +696,10 @@
         <div class="faqs">
           <details class="reveal"><summary>Do I need to be home during the cleanup?<i></i></summary><div class="faq-body"><p>Nope! Just make sure we can get into the yard and that your dogs are inside or secured. We'll close and latch the gate when we leave.</p></div></details>
           <details class="reveal" style="--d:.05s"><summary>Is there a contract?<i></i></summary><div class="faq-body"><p>Never. Recurring plans are simply prepaid month to month. Pause or cancel whenever you need to.</p></div></details>
-          <details class="reveal" style="--d:.08s"><summary>How much does it cost?<i></i></summary><div class="faq-body"><p>$20 per visit for 1–2 dogs, plus $5 per visit for each additional dog. Weekly and twice-a-month plans are prepaid monthly. One-time cleanups are quoted individually, so just <a href="mailto:info@poop-savvy.com">email us</a>.</p></div></details>
+          <details class="reveal" style="--d:.08s"><summary>How much does it cost?<i></i></summary><div class="faq-body"><p>It depends on your schedule and how many dogs you have. Fill out the <a href="#estimate">free quote form</a> and you'll see your price instantly. One-time cleanups are quoted individually by email.</p></div></details>
           <details class="reveal" style="--d:.1s"><summary>What do you do with the waste?<i></i></summary><div class="faq-body"><p>We bag everything up and haul it away with us, so there's nothing left behind in your trash can.</p></div></details>
           <details class="reveal" style="--d:.15s"><summary>What if it rains on my service day?<i></i></summary><div class="faq-body"><p>Light rain doesn't stop us. For severe weather we'll reschedule and let you know right away.</p></div></details>
-          <details class="reveal" style="--d:.2s"><summary>How do I get started?<i></i></summary><div class="faq-body"><p>Fill out the <a href="#estimate">quote form</a>. We'll email you a payment link, and once it's paid we'll send your first scheduled cleanup date.</p></div></details>
+          <details class="reveal" style="--d:.2s"><summary>How do I get started?<i></i></summary><div class="faq-body"><p>Get your <a href="#estimate">free quote</a>, then tap "Start service" and fill out a short intake form. We'll email you a payment link, and once it's paid we'll send your first scheduled cleanup date.</p></div></details>
         </div>
       </div>
     </section>
@@ -697,7 +709,7 @@
       <div class="wrap">
         <div class="cta reveal zoom" id="cta">
           <h2>Ready for a poop-free yard?</h2>
-          <p>Send your info in under a minute and we'll email your payment link.</p>
+          <p>Get your free quote in under a minute.</p>
           <a href="#estimate" class="btn btn-primary">Get my free quote <span class="arrow">→</span></a>
         </div>
       </div>
@@ -839,51 +851,18 @@
       }
     }
 
-    /* ---------- Live estimator + lead form ---------- */
-    // Leads are emailed to the owner through EmailJS (same account the old estimate form used).
+    /* ---------- Quote form ---------- */
+    // Quote requests are emailed to the owner through EmailJS (same account the old estimate form used).
+    // The price stays hidden until the visitor submits; "Start service" then carries their answers to intake.html.
     const EMAILJS = { publicKey: 'PYixL_lI3vvHOjvmi', service: 'service_qt03754', template: 'template_dfhkd1w' };
     if (window.emailjs) emailjs.init({ publicKey: EMAILJS.publicKey });
 
-    const form = $('#estForm');
-    let amountEl = $('#amount'), resultEl = $('#result'), msg = $('#msg'), next = $('#nextSteps');
-    const amountWrap = $('#amountWrap'), submitBtn = $('#submitBtn'), submitLabel = $('#submitLabel');
+    const form = $('#estForm'), msg = $('#msg'), quoteCard = $('#quoteCard');
     const serviceNames = { weekly: 'Weekly', twice: 'Twice a month', onetime: 'One-time cleanup' };
-    let shown = 20;
-    function currentPrice() {
-      const service = form.service.value, dogs = +form.dogs.value;
-      const price = service === 'onetime' ? null : perVisit(dogs) + ($('#deodorize').checked ? DEODORIZE : 0);
-      return { service, dogs, price };
-    }
-    function animateTo(to) {
-      const from = shown; shown = to;
-      resultEl.classList.remove('bump'); void resultEl.offsetWidth; resultEl.classList.add('bump');
-      if (reduced) { amountEl.textContent = to; return; }
-      const start = performance.now();
-      (function tick(t) {
-        const k = Math.min(1, (t - start) / 450);
-        amountEl.textContent = Math.round(from + (to - from) * k);
-        if (k < 1) requestAnimationFrame(tick);
-      })(start);
-    }
-    function update() {
-      const { service, price } = currentPrice();
-      const oneTime = service === 'onetime';
-      if (oneTime) {
-        amountWrap.innerHTML = 'Custom quote';
-        resultEl.classList.remove('bump'); void resultEl.offsetWidth; resultEl.classList.add('bump');
-      } else if (!amountWrap.contains(amountEl)) {
-        amountWrap.innerHTML = '$<span id="amount">' + shown + '</span> <small>/visit</small>';
-        amountEl = $('#amount');
-      }
-      $('#billing').textContent = oneTime ? "One-time pricing is sent by email" : 'Prepaid monthly';
-      submitLabel.textContent = oneTime ? 'Request one-time quote' : 'Get my quote';
-      if (!oneTime && price !== shown) animateTo(price);
-    }
-    form.addEventListener('change', update);
 
     $$('[data-plan]').forEach(a => a.addEventListener('click', () => {
+      showForm();
       form.querySelector(`input[name=service][value=${a.dataset.plan}]`).checked = true;
-      update();
     }));
 
     function setMsg(el, text, ok) {
@@ -891,39 +870,71 @@
       el.textContent = text;
     }
 
+    function countTo(el, to) {
+      if (reduced) { el.textContent = to; return; }
+      const start = performance.now();
+      (function tick(t) {
+        const k = Math.min(1, (t - start) / 900);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(tick);
+      })(start);
+    }
+
+    function showForm() {
+      quoteCard.hidden = true;
+      form.hidden = false;
+    }
+    $('#editBtn').addEventListener('click', () => { showForm(); form.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); });
+
+    function showQuote(q) {
+      const oneTime = q.service === 'onetime';
+      $('#quoteHello').textContent = oneTime ? `Thanks, ${q.name.split(' ')[0]}!` : `${q.name.split(' ')[0]}, here's your quote`;
+      $('#quoteEyebrow').textContent = oneTime ? 'Quote requested' : 'Your quote';
+      $('#result').hidden = oneTime;
+      $('#startBtn').hidden = oneTime;
+      $('#quoteNote').textContent = oneTime
+        ? `One-time cleanups are priced by yard size and buildup, so we'll email your custom quote to ${q.email} shortly.`
+        : "Like it? Tap Start service and we'll grab a few details (address, gate access, preferred day), then email your payment link.";
+      $('#quoteLines').innerHTML = [
+        ['Service', serviceNames[q.service]],
+        ['Dogs', q.dogs === 2 ? '1–2' : q.dogs],
+        ['Deodorize & sanitize', q.deodorize ? 'Yes' : 'No'],
+        ['Zip code', q.zip]
+      ].map(([k, v]) => `<li><span>${k}</span><strong>${v}</strong></li>`).join('');
+      const params = new URLSearchParams({ name: q.name, email: q.email, phone: q.phone, zip: q.zip, service: q.service, dogs: q.dogs, deodorize: q.deodorize ? 1 : 0 });
+      $('#startBtn').href = 'intake.html?' + params;
+      form.hidden = true;
+      quoteCard.hidden = false;
+      quoteCard.style.animation = 'none'; void quoteCard.offsetWidth; quoteCard.style.animation = '';
+      if (!oneTime) {
+        $('#amountWrap').innerHTML = '$<span id="amount">0</span> <small>/visit</small>';
+        countTo($('#amount'), q.price);
+      }
+      quoteCard.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+    }
+
     form.addEventListener('submit', e => {
       e.preventDefault();
       const name = $('#name').value.trim(), email = form.email.value.trim(), zip = form.zipcode.value.trim(), phone = form.phone.value.trim();
-      next.classList.remove('show');
       if (!name || !email || !zip) return setMsg(msg, 'Please fill out your name, zip code and email.');
       if (!/^\S+@\S+\.\S+$/.test(email)) return setMsg(msg, 'Please enter a valid email address.');
       if (!serviceZips.has(zip)) return setMsg(msg, `Sorry, we don't service ${zip} yet. Email us and we'll let you know when we do!`);
-      if (!window.emailjs) return setMsg(msg, "We couldn't send your request. Please email info@poop-savvy.com.");
+      setMsg(msg, '', true);
 
-      const { service, dogs, price } = currentPrice();
-      const params = {
+      const service = form.service.value, dogs = +form.dogs.value, deodorize = $('#deodorize').checked;
+      const price = service === 'onetime' ? null : perVisit(dogs) + (deodorize ? DEODORIZE : 0);
+      showQuote({ name, email, phone, zip, service, dogs, deodorize, price });
+
+      // Send the lead in the background so the visitor never waits on it.
+      if (!window.emailjs) return console.error('EmailJS not loaded; quote lead not sent.');
+      emailjs.send(EMAILJS.service, EMAILJS.template, {
+        form_type: 'Quote request',
         name, email, phone, zipcode: zip,
         service: serviceNames[service],
         dogs: dogs === 2 ? '1-2' : String(dogs),
-        deodorize: $('#deodorize').checked ? 'yes' : 'no',
-        estimate: price === null ? 'One-time cleanup: needs a quote' : `$${price.toFixed(2)} per visit, prepaid monthly`
-      };
-      submitBtn.disabled = true;
-      submitLabel.textContent = 'Sending…';
-      setMsg(msg, '', true);
-      emailjs.send(EMAILJS.service, EMAILJS.template, params).then(() => {
-        setMsg(msg, price === null
-          ? `Thanks ${name}! We got your request and will email your one-time cleanup price to ${email} soon. 🎉`
-          : `Thanks ${name}! We got your request. Watch ${email} for your payment link, and we'll schedule your first cleanup once it's paid. 🎉`, true);
-        next.classList.add('show');
-        form.reset(); update();
-      }, err => {
-        console.error('EmailJS error:', err);
-        setMsg(msg, "Something went wrong sending your request. Please try again or email info@poop-savvy.com.");
-      }).finally(() => {
-        submitBtn.disabled = false;
-        update();
-      });
+        deodorize: deodorize ? 'yes' : 'no',
+        estimate: price === null ? 'One-time cleanup: needs a custom quote' : `Quoted $${price.toFixed(2)} per visit, prepaid monthly`
+      }).catch(err => console.error('EmailJS error:', err));
     });
 
     /* ---------- Quick zip check ---------- */
@@ -937,6 +948,7 @@
         const a = document.createElement('a'); a.href = '#estimate'; a.textContent = 'Get your estimate →';
         el.appendChild(a);
         form.zipcode.value = zip;
+        showForm();
       } else {
         setMsg(el, `We're not in ${zip} yet, but email info@poop-savvy.com and we'll let you know when we are.`);
       }

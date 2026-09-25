@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start Service | Poop Savvy</title>
+  <meta name="description" content="Start your Poop Savvy dog poop removal service. Tell us about your yard and we'll email your payment link.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #2f9e44;
+      --green-dark: #1f6f30;
+      --green-soft: #e8f7ec;
+      --lime: #b8f36b;
+      --brown: #6b4423;
+      --cream: #fffaf2;
+      --ink: #1d2a21;
+      --muted: #5b6b60;
+      --white: #ffffff;
+      --radius: 22px;
+      --shadow: 0 18px 40px -18px rgba(31, 111, 48, .35);
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif; color: var(--ink); line-height: 1.6; overflow-x: hidden;
+      background:
+        radial-gradient(800px 420px at 90% 0%, rgba(184,243,107,.4), transparent 60%),
+        radial-gradient(600px 400px at 0% 100%, rgba(47,158,68,.14), transparent 60%),
+        var(--cream);
+      min-height: 100vh;
+    }
+    h1, h2, h3, .logo { font-family: 'Fredoka', 'Inter', sans-serif; line-height: 1.1; }
+    a { color: inherit; }
+    .wrap { width: min(760px, 100% - 32px); margin-inline: auto; }
+
+    /* ---------- Header ---------- */
+    header { padding: 18px 0; }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: min(1140px, 100% - 32px); }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 700; color: var(--green-dark); text-decoration: none; }
+    .logo-mark { width: 40px; height: 40px; border-radius: 12px; background: var(--green); display: grid; place-items: center; transition: transform .5s var(--ease); }
+    .logo:hover .logo-mark { transform: rotate(-12deg) scale(1.08); }
+    .back { font-weight: 600; text-decoration: none; color: var(--green-dark); }
+    .back:hover { text-decoration: underline; }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+      padding: .95em 1.6em; border-radius: 999px; border: 0;
+      font: 600 1rem 'Inter', sans-serif; text-decoration: none; cursor: pointer;
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .25s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary { background: var(--green); color: var(--white); box-shadow: var(--shadow); }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-3px); }
+    .btn-primary::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+      transform: translateX(-120%); animation: shine 3.5s var(--ease) infinite;
+    }
+    .btn-primary:disabled { opacity: .7; cursor: wait; transform: none; }
+    .btn-ghost { background: var(--white); color: var(--green-dark); border: 2px solid var(--green-soft); }
+    .btn-ghost:hover { border-color: var(--green); transform: translateY(-3px); }
+    .btn .arrow { transition: transform .3s var(--ease); }
+    .btn:hover .arrow { transform: translateX(4px); }
+    @keyframes shine { 0%, 60% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+
+    /* ---------- Steps ---------- */
+    .intro { text-align: center; padding: 20px 0 30px; }
+    .intro h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); margin-bottom: 10px; }
+    .intro p { color: var(--muted); font-size: 1.1rem; max-width: 46ch; margin: 0 auto; }
+    .steps { display: flex; justify-content: center; align-items: center; gap: 0; margin: 0 auto 28px; max-width: 520px; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: .85rem; font-weight: 600; color: var(--muted); flex: none; width: 96px; text-align: center; }
+    .dot { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--white); border: 3px solid #dcebdf; font-weight: 700; transition: all .5s var(--ease); }
+    .step.done .dot { background: var(--green); border-color: var(--green); color: var(--white); }
+    .step.active .dot { border-color: var(--green); color: var(--green-dark); animation: ping 2s ease-out infinite; }
+    .step.active { color: var(--ink); }
+    @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(47,158,68,.45); } 80%, 100% { box-shadow: 0 0 0 12px rgba(47,158,68,0); } }
+    .bar { flex: 1; height: 4px; background: #dcebdf; border-radius: 4px; overflow: hidden; margin-bottom: 26px; }
+    .bar i { display: block; height: 100%; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease) .3s; }
+    .bar.fill i { transform: scaleX(1); }
+
+    /* ---------- Cards / fields ---------- */
+    .card { background: var(--white); border-radius: var(--radius); padding: 30px; box-shadow: 0 30px 60px -30px rgba(31,111,48,.4); margin-bottom: 20px; }
+    .card h2 { font-size: 1.45rem; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+    .card h2 .ico { width: 38px; height: 38px; border-radius: 12px; background: var(--green-soft); display: grid; place-items: center; font-size: 1.1rem; }
+    .card > p.sub { color: var(--muted); margin-bottom: 18px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 6px; border: 0; min-width: 0; }
+    .full { grid-column: 1 / -1; }
+    .field label, .legend { font-weight: 600; font-size: .92rem; }
+    .opt { color: var(--muted); font-weight: 500; font-size: .85em; }
+    .field input, .field select, .field textarea {
+      padding: 13px 14px; border-radius: 12px; border: 2px solid #e4ece6; font: inherit; background: #fbfdfb; width: 100%;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .field textarea { min-height: 90px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px rgba(47,158,68,.15); }
+    .field.invalid input, .field.invalid select { border-color: #c0392b; animation: shake .4s; }
+    @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    .choices { display: grid; gap: 8px; margin-top: 6px; }
+    .choices.three { grid-template-columns: repeat(3, 1fr); }
+    .choices.four { grid-template-columns: repeat(4, 1fr); }
+    .choice { position: relative; }
+    .choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .choice span { display: block; text-align: center; padding: 11px 6px; border-radius: 12px; border: 2px solid #e4ece6; cursor: pointer; font-weight: 600; font-size: .9rem; transition: all .25s var(--ease); user-select: none; }
+    .choice span:hover { border-color: var(--green); }
+    .choice input:checked + span { background: var(--green); border-color: var(--green); color: var(--white); transform: scale(1.04); }
+    .choice input:focus-visible + span { box-shadow: 0 0 0 4px rgba(47,158,68,.25); }
+    .toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 12px; background: var(--green-soft); cursor: pointer; }
+    .toggle.field { flex-direction: row; }
+    .toggle input { appearance: none; width: 50px; height: 28px; border-radius: 999px; background: #c9d8cd; position: relative; cursor: pointer; transition: background .25s; flex: none; }
+    .toggle input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--white); transition: transform .3s var(--ease); box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+    .toggle input:checked { background: var(--green); }
+    .toggle input:checked::after { transform: translateX(22px); }
+    .agree { display: flex; gap: 12px; align-items: flex-start; font-size: .95rem; cursor: pointer; }
+    .agree input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--green); flex: none; }
+
+    /* ---------- Quote summary ---------- */
+    .quote { background: var(--green-dark); color: var(--white); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .quote .label { color: var(--lime); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .78rem; }
+    .quote .amount { font-family: 'Fredoka'; font-size: 2.6rem; font-weight: 700; line-height: 1.1; }
+    .quote .amount small { font-family: 'Inter'; font-size: .95rem; font-weight: 500; opacity: .8; }
+    .quote .meta { color: #cde8d3; font-size: .95rem; }
+    .quote.bump .amount { animation: bump .45s var(--ease); }
+    @keyframes bump { 40% { transform: scale(1.1); } }
+
+    .submit { width: 100%; font-size: 1.08rem; padding: 1.1em; }
+    .msg { margin-top: 14px; font-weight: 500; min-height: 1.6em; text-align: center; }
+    .msg.err { color: #c0392b; }
+    .msg a { color: inherit; font-weight: 700; }
+
+    /* ---------- Success ---------- */
+    .success { text-align: center; padding: 50px 30px; position: relative; overflow: hidden; }
+    .success .big { font-size: 4rem; display: inline-block; animation: pop .8s var(--ease) both; }
+    @keyframes pop { 0% { transform: scale(0) rotate(-30deg); } 70% { transform: scale(1.2) rotate(8deg); } 100% { transform: scale(1); } }
+    .success h2 { font-size: 2.2rem; justify-content: center; margin: 12px 0; }
+    .success p { color: var(--muted); font-size: 1.08rem; max-width: 44ch; margin: 0 auto 10px; }
+    .burst { position: absolute; left: 50%; top: 90px; font-size: 22px; pointer-events: none; animation: burst 1.4s var(--ease) forwards; }
+    @keyframes burst { from { transform: translate(-50%, 0) scale(.4); opacity: 1; } to { transform: translate(calc(-50% + var(--x)), var(--y)) scale(1) rotate(var(--r)); opacity: 0; } }
+
+    /* ---------- Entrance ---------- */
+    .rise { opacity: 0; transform: translateY(30px); animation: rise .8s var(--ease) forwards; animation-delay: var(--d, 0s); }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+
+    footer { text-align: center; color: var(--muted); padding: 30px 0 50px; }
+    footer a { color: var(--green-dark); font-weight: 600; text-decoration: none; }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 24px 18px; }
+      .choices.four { grid-template-columns: repeat(2, 1fr); }
+      .step { width: 76px; font-size: .78rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .rise { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a href="index.html" class="logo" aria-label="Poop Savvy home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><ellipse cx="6" cy="9" rx="2.2" ry="2.8"/><ellipse cx="10.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="15.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="19.5" cy="9.5" rx="2" ry="2.6"/><path d="M12.8 11c-3 0-6.3 4.4-6.3 7 0 1.8 1.4 2.6 3 2.6 1.3 0 2.2-.6 3.3-.6s2 .6 3.3.6c1.6 0 3-.8 3-2.6 0-2.6-3.3-7-6.3-7z"/></svg>
+        </span>
+        Poop Savvy
+      </a>
+      <a href="index.html#estimate" class="back">← Back to quote</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="intro rise">
+      <h1>Let's get you started</h1>
+      <p>A few quick details so we can set up your service. We'll email your payment link as soon as we've reviewed it.</p>
+    </div>
+
+    <div class="steps rise" style="--d:.1s" aria-label="Sign-up progress">
+      <div class="step done"><span class="dot">✓</span>Quote</div>
+      <div class="bar fill" id="bar1"><i></i></div>
+      <div class="step active" id="stepDetails"><span class="dot">2</span>Details</div>
+      <div class="bar" id="bar2"><i></i></div>
+      <div class="step" id="stepPay"><span class="dot">3</span>Payment link</div>
+    </div>
+
+    <form id="intake" novalidate>
+      <section class="card quote rise" style="--d:.15s" id="quoteBox" hidden aria-live="polite">
+        <div>
+          <div class="label">Your quote</div>
+          <div class="amount">$<span id="qAmount">0</span> <small>/visit</small></div>
+          <div class="meta" id="qMeta"></div>
+        </div>
+        <div class="meta">Prepaid monthly<br>No contracts</div>
+      </section>
+
+      <section class="card rise" style="--d:.2s">
+        <h2><span class="ico">👋</span>Contact info</h2>
+        <p class="sub">How should we reach you?</p>
+        <div class="grid">
+          <div class="field full"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="phone">Mobile phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 555-5555" required></div>
+        </div>
+      </section>
+
+      <section class="card rise" style="--d:.28s">
+        <h2><span class="ico">🏡</span>Service address</h2>
+        <p class="sub">Where's the yard we'll be cleaning?</p>
+        <div class="grid">
+          <div class="field full"><label for="street">Street address</label><input id="street" name="street" autocomplete="street-address" required></div>
+          <div class="field"><label for="city">City</label><input id="city" name="city" autocomplete="address-level2" required></div>
+          <div class="field"><label for="zip">Zip code</label><input id="zip" name="zip" inputmode="numeric" maxlength="5" autocomplete="postal-code" required></div>
+        </div>
+      </section>
+
+      <section class="card rise" style="--d:.36s">
+        <h2><span class="ico">📋</span>Your plan</h2>
+        <p class="sub">Double-check what you picked on your quote.</p>
+        <div class="grid">
+          <fieldset class="field full">
+            <legend class="legend">Service</legend>
+            <div class="choices three">
+              <label class="choice"><input type="radio" name="service" value="weekly" checked><span>Weekly</span></label>
+              <label class="choice"><input type="radio" name="service" value="twice"><span>Twice / mo</span></label>
+              <label class="choice"><input type="radio" name="service" value="onetime"><span>One-time</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="field full">
+            <legend class="legend">Number of dogs</legend>
+            <div class="choices four">
+              <label class="choice"><input type="radio" name="dogs" value="2" checked><span>1–2 🐕</span></label>
+              <label class="choice"><input type="radio" name="dogs" value="3"><span>3 🐕</span></label>
+              <label class="choice"><input type="radio" name="dogs" value="4"><span>4 🐕</span></label>
+              <label class="choice"><input type="radio" name="dogs" value="5"><span>5 🐕</span></label>
+            </div>
+          </fieldset>
+          <label class="toggle field full">
+            <span><strong>Deodorize &amp; sanitize</strong><br><small style="color:var(--muted)">Fresh, pet-safe spray every visit</small></span>
+            <input type="checkbox" id="deodorize" name="deodorize">
+          </label>
+        </div>
+      </section>
+
+      <section class="card rise" style="--d:.44s">
+        <h2><span class="ico">🐶</span>Your pups &amp; yard</h2>
+        <p class="sub">Helps us keep your dogs safe and do a thorough job.</p>
+        <div class="grid">
+          <div class="field full"><label for="dogInfo">Dog names &amp; breeds <span class="opt">(optional)</span></label><input id="dogInfo" name="dogInfo" placeholder="e.g. Bella (lab), Max (beagle)"></div>
+          <div class="field">
+            <label for="yard">Yard size</label>
+            <select id="yard" name="yard" required>
+              <option value="">Choose one</option>
+              <option>Small (townhome / small backyard)</option>
+              <option>Medium (typical backyard)</option>
+              <option>Large (big backyard)</option>
+              <option>Very large (1/2 acre or more)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="dogsDuring">Dogs during visits</label>
+            <select id="dogsDuring" name="dogsDuring" required>
+              <option value="">Choose one</option>
+              <option>I'll keep them inside</option>
+              <option>They're friendly and can stay out</option>
+              <option>Please don't enter if they're out</option>
+            </select>
+          </div>
+          <div class="field full"><label for="access">Gate code / how to get in</label><input id="access" name="access" placeholder="e.g. side gate on the left, code 1234" required></div>
+          <div class="field full"><label for="notes">Anything else we should know? <span class="opt">(optional)</span></label><textarea id="notes" name="notes" placeholder="Areas to skip, sprinklers, other pets, etc."></textarea></div>
+        </div>
+      </section>
+
+      <section class="card rise" style="--d:.52s">
+        <h2><span class="ico">📅</span>Scheduling</h2>
+        <p class="sub">We'll do our best to match your preferences.</p>
+        <div class="grid">
+          <div class="field">
+            <label for="day">Preferred service day</label>
+            <select id="day" name="day">
+              <option>No preference</option>
+              <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option>
+            </select>
+          </div>
+          <div class="field"><label for="start">Preferred start date <span class="opt">(optional)</span></label><input id="start" name="start" type="date"></div>
+          <div class="field full">
+            <label for="source">How did you hear about us? <span class="opt">(optional)</span></label>
+            <select id="source" name="source">
+              <option value="">Choose one</option>
+              <option>Google</option><option>Facebook</option><option>Nextdoor</option><option>Friend or neighbor</option><option>Yard sign</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card rise" style="--d:.6s">
+        <label class="agree"><input type="checkbox" id="agree" required> <span>I understand recurring service is prepaid monthly, and I'll receive a payment link by email before my first cleanup.</span></label>
+        <div style="margin-top:20px"><button type="submit" class="btn btn-primary submit" id="submitBtn"><span id="submitLabel">Send my details</span> <span class="arrow">→</span></button></div>
+        <p class="msg" id="msg" aria-live="polite"></p>
+      </section>
+    </form>
+
+    <section class="card success" id="success" hidden aria-live="polite">
+      <span class="big">🎉</span>
+      <h2>You're all set!</h2>
+      <p id="successText">We got your details. Watch your inbox for your payment link, and we'll confirm your first cleanup date once it's paid.</p>
+      <p>Questions? Email <a href="mailto:info@poop-savvy.com">info@poop-savvy.com</a></p>
+      <div style="margin-top:20px"><a href="index.html" class="btn btn-ghost">Back to home</a></div>
+    </section>
+  </main>
+
+  <footer>
+    Poop Savvy · Family-owned pet waste removal · Southern DFW · <a href="mailto:info@poop-savvy.com">info@poop-savvy.com</a>
+  </footer>
+
+  <script>
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $ = s => document.querySelector(s);
+
+    // Keep pricing and zips in sync with index.html.
+    const BASE = 20, EXTRA_DOG = 5, DEODORIZE = 10;
+    const perVisit = dogs => BASE + EXTRA_DOG * Math.max(0, dogs - 2);
+    const serviceZips = new Set([
+      "75033", "75034", "75035", "75036", "75068", "75023", "75024", "75025", "75074", "75075", "75093", "75094",
+      "75050", "75051", "75052", "75053", "75054", "75104", "75115", "75123", "75116", "75137", "75138", "75134",
+      "75146", "75154", "75165", "75167", "75168", "76001", "76002", "76006", "76010", "76011", "76012", "76013",
+      "76014", "76015", "76016", "76017", "76018", "76040", "76060", "76065", "76063"
+    ]);
+    const serviceNames = { weekly: 'Weekly', twice: 'Twice a month', onetime: 'One-time cleanup' };
+
+    // Intake submissions go to the owner through the same EmailJS account as the quote form.
+    const EMAILJS = { publicKey: 'PYixL_lI3vvHOjvmi', service: 'service_qt03754', template: 'template_dfhkd1w' };
+    if (window.emailjs) emailjs.init({ publicKey: EMAILJS.publicKey });
+
+    const form = $('#intake'), msg = $('#msg');
+
+    /* ---------- Prefill from the quote ---------- */
+    const q = new URLSearchParams(location.search);
+    const fromQuote = q.has('service');
+    if (q.get('name')) form.name.value = q.get('name');
+    if (q.get('email')) form.email.value = q.get('email');
+    if (q.get('phone')) form.phone.value = q.get('phone');
+    if (q.get('zip')) form.zip.value = q.get('zip');
+    const setRadio = (name, v) => { const el = form.querySelector(`input[name=${name}][value="${v}"]`); if (el) el.checked = true; };
+    if (q.get('service')) setRadio('service', q.get('service'));
+    if (q.get('dogs')) setRadio('dogs', q.get('dogs'));
+    $('#deodorize').checked = q.get('deodorize') === '1';
+    form.start.min = new Date().toISOString().slice(0, 10);
+
+    /* ---------- Quote summary (only after a quote was given) ---------- */
+    let shown = 0;
+    function currentPlan() {
+      const service = form.service.value, dogs = +form.dogs.value, deodorize = $('#deodorize').checked;
+      const price = service === 'onetime' ? null : perVisit(dogs) + (deodorize ? DEODORIZE : 0);
+      return { service, dogs, deodorize, price };
+    }
+    function animateTo(el, to) {
+      const from = shown; shown = to;
+      if (reduced) { el.textContent = to; return; }
+      const start = performance.now();
+      (function tick(t) {
+        const k = Math.min(1, (t - start) / 700);
+        el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(tick);
+      })(start);
+    }
+    function updateQuote() {
+      if (!fromQuote) return;
+      const p = currentPlan(), box = $('#quoteBox');
+      box.hidden = p.price === null;
+      if (p.price === null) return;
+      $('#qMeta').textContent = `${serviceNames[p.service]} · ${p.dogs === 2 ? '1–2' : p.dogs} dogs${p.deodorize ? ' · deodorize' : ''}`;
+      box.classList.remove('bump'); void box.offsetWidth; box.classList.add('bump');
+      animateTo($('#qAmount'), p.price);
+    }
+    form.addEventListener('change', e => { if (['service', 'dogs', 'deodorize'].includes(e.target.name)) updateQuote(); });
+    updateQuote();
+
+    /* ---------- Submit ---------- */
+    function fail(el, text) {
+      if (el) {
+        const f = el.closest('.field') || el.closest('.agree');
+        f.classList.remove('invalid'); void f.offsetWidth; f.classList.add('invalid');
+        el.focus({ preventScroll: true });
+        el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+      }
+      msg.className = 'msg err';
+      msg.textContent = text;
+    }
+    form.addEventListener('input', e => e.target.closest('.field')?.classList.remove('invalid'));
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const v = id => form[id].value.trim();
+      for (const id of ['name', 'email', 'phone', 'street', 'city', 'zip', 'yard', 'dogsDuring', 'access']) {
+        if (!v(id)) return fail(form[id], 'Please fill out the highlighted field.');
+      }
+      if (!/^\S+@\S+\.\S+$/.test(v('email'))) return fail(form.email, 'Please enter a valid email address.');
+      if (v('phone').replace(/\D/g, '').length < 10) return fail(form.phone, 'Please enter a 10-digit phone number.');
+      if (!serviceZips.has(v('zip'))) return fail(form.zip, `Sorry, we don't service ${v('zip')} yet. Email info@poop-savvy.com and we'll let you know when we do.`);
+      if (!$('#agree').checked) return fail($('#agree'), 'Please check the box to continue.');
+
+      const p = currentPlan();
+      const quoteText = p.price === null ? 'One-time cleanup: needs a custom quote' : `$${p.price.toFixed(2)} per visit, prepaid monthly`;
+      const details = [
+        `Name: ${v('name')}`,
+        `Email: ${v('email')}`,
+        `Phone: ${v('phone')}`,
+        `Address: ${v('street')}, ${v('city')} ${v('zip')}`,
+        `Service: ${serviceNames[p.service]}`,
+        `Dogs: ${p.dogs === 2 ? '1-2' : p.dogs}${v('dogInfo') ? ` (${v('dogInfo')})` : ''}`,
+        `Deodorize: ${p.deodorize ? 'yes' : 'no'}`,
+        `Quote: ${quoteText}`,
+        `Yard size: ${v('yard')}`,
+        `Dogs during visits: ${v('dogsDuring')}`,
+        `Gate / access: ${v('access')}`,
+        `Preferred day: ${v('day')}`,
+        `Start date: ${v('start') || 'As soon as possible'}`,
+        `Heard about us: ${v('source') || 'Not given'}`,
+        `Notes: ${v('notes') || 'None'}`
+      ].join('\n');
+
+      const btn = $('#submitBtn'), label = $('#submitLabel');
+      btn.disabled = true; label.textContent = 'Sending…';
+      msg.className = 'msg'; msg.textContent = '';
+
+      const mailto = `mailto:info@poop-savvy.com?subject=${encodeURIComponent('New service sign-up')}&body=${encodeURIComponent(details)}`;
+      const sendFailed = err => {
+        console.error('EmailJS error:', err);
+        btn.disabled = false; label.textContent = 'Send my details';
+        msg.className = 'msg err';
+        msg.innerHTML = `Something went wrong sending your details. Please try again, or <a href="${mailto}">email them to us</a> instead.`;
+      };
+      if (!window.emailjs) return sendFailed('EmailJS not loaded');
+
+      emailjs.send(EMAILJS.service, EMAILJS.template, {
+        form_type: 'New service sign-up (intake)',
+        name: v('name'), email: v('email'), phone: v('phone'), zipcode: v('zip'),
+        service: serviceNames[p.service],
+        dogs: p.dogs === 2 ? '1-2' : String(p.dogs),
+        deodorize: p.deodorize ? 'yes' : 'no',
+        address: `${v('street')}, ${v('city')} ${v('zip')}`,
+        dog_info: v('dogInfo'), yard: v('yard'), dogs_during: v('dogsDuring'), access: v('access'),
+        day: v('day'), start: v('start'), source: v('source'), notes: v('notes'),
+        message: details,
+        // The existing EmailJS template shows {{estimate}}, so the full intake goes there too
+        // and nothing is lost until the template is updated to show the new fields.
+        estimate: `NEW SIGN-UP\n${details}`
+      }).then(() => showSuccess(p), sendFailed);
+    });
+
+    function showSuccess(p) {
+      form.hidden = true;
+      const s = $('#success');
+      if (p.price === null) $('#successText').textContent = "We got your details. We'll email your custom one-time cleanup quote and payment link shortly.";
+      s.hidden = false;
+      $('#bar2').classList.add('fill');
+      $('#stepDetails').className = 'step done';
+      $('#stepDetails .dot').textContent = '✓';
+      $('#stepPay').className = 'step active';
+      scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+      if (reduced) return;
+      for (let i = 0; i < 16; i++) {
+        const b = document.createElement('span');
+        const a = (i / 16) * Math.PI * 2;
+        b.className = 'burst';
+        b.textContent = i % 2 ? '🐾' : '✨';
+        b.style.setProperty('--x', Math.cos(a) * 160 + 'px');
+        b.style.setProperty('--y', Math.sin(a) * 110 + 'px');
+        b.style.setProperty('--r', (Math.random() * 120 - 60) + 'deg');
+        s.appendChild(b);
+        setTimeout(() => b.remove(), 1500);
+      }
+    }
+  </script>
+</body>
+</html>
