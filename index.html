@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Poop Savvy | Dog Poop Removal in Southern DFW</title>
-  <meta name="description" content="Family-owned dog poop removal serving Southern DFW. Weekly, twice-a-month and one-time yard cleanups. No contracts. Get an instant estimate.">
+  <title>Dog Poop Removal Near You | Southern DFW Pooper Scooper</title>
+  <meta name="description" content="Family-owned dog poop removal in DeSoto, Lancaster, Duncanville, Cedar Hill, Glenn Heights, Red Oak, Ovilla and Midlothian. Weekly and every-other-week service, prepaid monthly, no contracts. Get a free quote.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -73,6 +73,9 @@
     .logo { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 700; color: var(--green-dark); text-decoration: none; }
     .logo-mark { width: 40px; height: 40px; border-radius: 12px; background: var(--green); display: grid; place-items: center; transition: transform .5s var(--ease); }
     .logo:hover .logo-mark { transform: rotate(-12deg) scale(1.08); }
+    .logo-text { font-size: 1.2rem; line-height: 1; }
+    .logo-text small { display: block; font-size: .72em; color: var(--brown); margin-top: 2px; }
+    .nav-phone { font-weight: 700; color: var(--green-dark); white-space: nowrap; }
     .nav-links { display: flex; gap: 26px; list-style: none; align-items: center; }
     .nav-links a:not(.btn) { text-decoration: none; font-weight: 500; position: relative; }
     .nav-links a:not(.btn)::after {
@@ -268,6 +271,8 @@
     .quote-lines { list-style: none; display: grid; gap: 8px; margin: 18px 0 22px; }
     .quote-lines li { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px dashed #e4ece6; }
     .quote-lines li span { color: var(--muted); }
+    .offer { display: inline-block; margin-top: 8px; background: var(--lime); color: var(--ink); font-weight: 700; font-size: .85rem; padding: 5px 12px; border-radius: 999px; animation: wiggle 2.6s ease-in-out infinite; }
+    @keyframes wiggle { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
     .quote-actions { display: flex; flex-wrap: wrap; gap: 10px; }
     .quote-note { color: var(--muted); font-size: .92rem; margin-top: 14px; }
 
@@ -291,6 +296,14 @@
 
     /* ---------- Areas ---------- */
     .areas { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+    .story { display: grid; grid-template-columns: .7fr 1.3fr; gap: 50px; align-items: center; }
+    .story h2 { font-size: clamp(2rem, 4.2vw, 2.9rem); margin: 10px 0 16px; }
+    .story p { color: var(--muted); font-size: 1.08rem; margin-bottom: 12px; }
+    .story blockquote { margin-top: 20px; padding: 20px 24px; border-left: 5px solid var(--green); background: var(--green-soft); border-radius: 0 18px 18px 0; font-weight: 600; font-size: 1.08rem; }
+    .story cite { display: block; margin-top: 8px; font-style: normal; font-weight: 500; color: var(--muted); font-size: .95rem; }
+    .story-badge { aspect-ratio: 1; max-width: 300px; width: 100%; justify-self: center; border-radius: 50%; background: var(--brown); color: var(--white); display: grid; place-items: center; text-align: center; box-shadow: var(--shadow); animation: spinSlow 18s linear infinite; }
+    .story-badge span { font-family: 'Fredoka'; font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700; line-height: 1.1; text-transform: uppercase; animation: spinSlow 18s linear infinite reverse; }
+    @keyframes spinSlow { to { transform: rotate(360deg); } }
     .area-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
     .area-tags span {
       background: var(--white); border: 2px solid var(--green-soft); padding: 8px 16px; border-radius: 999px; font-weight: 600;
@@ -350,7 +363,8 @@
 
     /* ---------- Responsive ---------- */
     @media (max-width: 960px) {
-      .hero .wrap, .estimator, .areas { grid-template-columns: 1fr; }
+      .hero .wrap, .estimator, .areas, .story { grid-template-columns: 1fr; }
+      .story-badge { max-width: 220px; }
       .hero { text-align: center; padding-top: 120px; }
       .hero p.lead { margin-inline: auto; }
       .hero-cta, .hero-checks { justify-content: center; }
@@ -359,7 +373,7 @@
       .plan.featured { order: -1; }
       .map-art { max-width: 440px; margin: 0 auto; }
     }
-    @media (max-width: 760px) {
+    @media (max-width: 1080px) {
       .nav-links {
         position: fixed; inset: 0 0 auto 0; top: 64px; flex-direction: column; background: var(--cream);
         padding: 24px 16px 30px; gap: 18px; box-shadow: 0 20px 30px -20px rgba(0,0,0,.3);
@@ -368,6 +382,8 @@
       .nav.open .nav-links { transform: none; }
       .nav.open { background: var(--cream); }
       .menu-btn { display: block; }
+    }
+    @media (max-width: 760px) {
       .steps { grid-template-columns: 1fr; gap: 40px; }
       .steps-line { display: none; }
       .block { padding: 80px 0; }
@@ -396,18 +412,20 @@
   <!-- NAV -->
   <header class="nav" id="nav">
     <div class="wrap">
-      <a href="#top" class="logo" aria-label="Poop Savvy home">
+      <a href="#top" class="logo" aria-label="Dog Poop Removal Near You home">
         <span class="logo-mark" aria-hidden="true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><ellipse cx="6" cy="9" rx="2.2" ry="2.8"/><ellipse cx="10.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="15.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="19.5" cy="9.5" rx="2" ry="2.6"/><path d="M12.8 11c-3 0-6.3 4.4-6.3 7 0 1.8 1.4 2.6 3 2.6 1.3 0 2.2-.6 3.3-.6s2 .6 3.3.6c1.6 0 3-.8 3-2.6 0-2.6-3.3-7-6.3-7z"/></svg>
         </span>
-        Poop Savvy
+        <span class="logo-text">Dog Poop Removal<small>Near You</small></span>
       </a>
       <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
       <ul class="nav-links" id="navLinks">
         <li><a href="#how">How it works</a></li>
         <li><a href="#plans">Plans</a></li>
+        <li><a href="#story">Our story</a></li>
         <li><a href="#areas">Service area</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="tel:+12147026169" class="nav-phone">📞 214.702.6169</a></li>
         <li><a href="#estimate" class="btn btn-primary">Free quote</a></li>
       </ul>
     </div>
@@ -419,7 +437,7 @@
       <div class="paws" id="paws" aria-hidden="true"></div>
       <div class="wrap">
         <div>
-          <span class="pill reveal"><span class="pulse"></span> Family-owned · Serving Southern DFW</span>
+          <span class="pill reveal"><span class="pulse"></span> Family-owned in DeSoto · Serving Southern DFW</span>
           <h1 class="reveal" style="--d:.1s">We scoop the poop.<br>You enjoy the <span class="swap" id="swap"><span>yard.</span></span></h1>
           <p class="lead reveal" style="--d:.2s">Dependable, affordable dog poop removal that keeps your yard clean, safe and odor-free. Prepaid monthly, no contracts.</p>
           <div class="hero-cta reveal" style="--d:.3s">
@@ -454,8 +472,8 @@
             <rect x="72" y="108" width="36" height="8" rx="4" fill="#2f9e44" transform="rotate(-12 90 112)"/>
             <circle cx="92" cy="122" r="5" fill="#b8f36b"/>
           </svg>
-          <div class="float-card fc-1"><span class="ico">🧹</span><div>Yard cleaned<small>Just now · Arlington</small></div></div>
-          <div class="float-card fc-2"><span class="ico">🌿</span><div>Deodorized<small>Fresh &amp; odor-free</small></div></div>
+          <div class="float-card fc-1"><span class="ico">🧹</span><div>Yard cleaned<small>Just now · DeSoto</small></div></div>
+          <div class="float-card fc-2"><span class="ico">📸</span><div>Gate closed<small>Photo texted to you</small></div></div>
         </div>
       </div>
       <svg class="wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
@@ -491,7 +509,7 @@
           <div class="step reveal" style="--d:.3s">
             <div class="step-num">🐶<b>3</b></div>
             <h3>Enjoy your yard</h3>
-            <p>We scoop, bag and haul it away. Your gate stays closed and your pups stay happy.</p>
+            <p>We scoop, double-bag it and put it in your outdoor bin. Then we close the gate and text you a photo.</p>
           </div>
         </div>
       </div>
@@ -511,7 +529,7 @@
             <p class="sub">Every other week</p>
             <ul>
               <li>Cleanup every other week</li>
-              <li>Waste bagged &amp; hauled away</li>
+              <li>Waste double-bagged in your bin</li>
               <li>Prepaid monthly</li>
             </ul>
             <a href="#estimate" class="btn btn-ghost" data-plan="twice">Get my quote</a>
@@ -522,8 +540,9 @@
             <p class="sub">A spotless yard, always</p>
             <ul>
               <li>Cleanup every week</li>
-              <li>Waste bagged &amp; hauled away</li>
-              <li>Gate check every visit</li>
+              <li>Waste double-bagged in your bin</li>
+              <li>On-the-way &amp; done texts</li>
+              <li>Closed-gate photo every visit</li>
               <li>Prepaid monthly</li>
             </ul>
             <a href="#estimate" class="btn btn-primary" data-plan="weekly">Get my quote <span class="arrow">→</span></a>
@@ -540,7 +559,7 @@
             <a href="#estimate" class="btn btn-ghost" data-plan="onetime">Request a quote</a>
           </article>
         </div>
-        <p class="plans-note reveal">🌿 Add a deodorizing &amp; sanitizing spray to any visit. Just check the box on your quote.</p>
+        <p class="plans-note reveal">🎁 First week free when you prepay your first month.<br>🌿 Add a deodorizing &amp; sanitizing spray to any visit. Just check the box on your quote.</p>
       </div>
     </section>
 
@@ -568,7 +587,7 @@
             </div>
             <div class="field">
               <label for="zipcode">Zip code</label>
-              <input id="zipcode" name="zipcode" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="76063" required>
+              <input id="zipcode" name="zipcode" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="75115" required>
             </div>
             <div class="field">
               <label for="email">Email</label>
@@ -611,6 +630,7 @@
           <div class="result" id="result">
             <div class="amount" id="amountWrap">$<span id="amount">0</span> <small>/visit</small></div>
             <small id="billing" style="color:var(--muted)">Prepaid monthly · no contracts</small>
+            <span class="offer">🎁 First week free when you prepay your first month</span>
           </div>
           <ul class="quote-lines" id="quoteLines"></ul>
           <div class="quote-actions">
@@ -627,22 +647,37 @@
     <section class="block why-bg" id="why">
       <div class="wrap">
         <div class="head reveal">
-          <span class="eyebrow">Why Poop Savvy</span>
+          <span class="eyebrow">Why us</span>
           <h2>The neighbors will notice</h2>
-          <p>We're a local, family-owned crew who treat your yard like our own.</p>
+          <p>Josh and Dee are a local, family-owned team who treat your yard like their own.</p>
         </div>
         <div class="features">
-          <div class="feature reveal" style="--d:0s"><div class="ico">👨‍👩‍👧</div><h3>Family-owned</h3><p>A local DFW business, not a faceless franchise. You'll always reach a real person.</p></div>
-          <div class="feature reveal" style="--d:.1s"><div class="ico">📆</div><h3>Reliable schedule</h3><p>Same day, every visit. We show up so you never have to think about it.</p></div>
+          <div class="feature reveal" style="--d:0s"><div class="ico">👨‍👩‍👧</div><h3>Family-owned</h3><p>Based in DeSoto, not a faceless franchise. Call or text and you reach a real person.</p></div>
+          <div class="feature reveal" style="--d:.1s"><div class="ico">📆</div><h3>You always know we came</h3><p>Same service day every week, with an on-the-way text and a done text.</p></div>
           <div class="feature reveal" style="--d:.2s"><div class="ico">💸</div><h3>Affordable &amp; flexible</h3><p>Simple prepaid monthly billing with zero long-term contracts.</p></div>
-          <div class="feature reveal" style="--d:.3s"><div class="ico">🔒</div><h3>Gate-safe</h3><p>We double-check every gate before we leave, so your pups stay put.</p></div>
+          <div class="feature reveal" style="--d:.3s"><div class="ico">🔒</div><h3>Gate-safe</h3><p>We close the gate and text you a photo after every visit, so your pups stay put.</p></div>
           <div class="feature reveal" style="--d:.4s"><div class="ico">🧼</div><h3>Clean &amp; sanitary</h3><p>Sanitized tools between yards to help stop the spread of germs and parasites.</p></div>
           <div class="feature reveal" style="--d:.5s"><div class="ico">🌿</div><h3>Odor-free option</h3><p>Add our deodorizing spray for a yard that smells as good as it looks.</p></div>
         </div>
         <div class="stats">
-          <div class="stat reveal"><b><span class="count" data-to="10">10</span>+</b><span>DFW cities served</span></div>
+          <div class="stat reveal"><b><span class="count" data-to="8">8</span></b><span>Southern DFW cities</span></div>
           <div class="stat reveal" style="--d:.1s"><b><span class="count" data-to="0">0</span></b><span>Contracts required</span></div>
           <div class="stat reveal" style="--d:.2s"><b><span class="count" data-to="60">60</span>s</b><span>To get your free quote</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="block" id="story">
+      <div class="wrap story">
+        <div class="story-badge reveal from-left" aria-hidden="true"><span>Born from<br>a chore<br>we hated</span></div>
+        <div class="reveal from-right">
+          <span class="eyebrow">Our very honest story</span>
+          <h2>It started because Josh hated picking up dog poop.</h2>
+          <p>Not disliked it. Hated it. The smell, the bending, watching every step, and knowing it would all need doing again a few days later.</p>
+          <p>Then came the obvious thought: if he hated it, plenty of other dog owners did too. Busy parents, long workdays, bad backs, and anyone who'd rather spend Saturday enjoying the yard than searching it.</p>
+          <p>So Josh and Dee built this service in DeSoto to take one gross, repetitive job off your list for good. We're growing neighborhood by neighborhood across Southern DFW so routes stay tight and service stays personal.</p>
+          <blockquote>"I hated picking up dog poop. Then I realized plenty of other people hated it just as much, and would gladly pay someone dependable to make it disappear."<cite>Josh Reed, founder</cite></blockquote>
         </div>
       </div>
     </section>
@@ -652,8 +687,8 @@
       <div class="wrap areas">
         <div class="reveal from-left">
           <span class="eyebrow">Service area</span>
-          <h2 style="font-size:clamp(2rem,4.4vw,3rem);margin:10px 0 14px">Proudly scooping across DFW</h2>
-          <p style="color:var(--muted);font-size:1.1rem">From Frisco to Waxahachie, if you're in one of these cities there's a good chance we're already in your neighborhood.</p>
+          <h2 style="font-size:clamp(2rem,4.4vw,3rem);margin:10px 0 14px">Now scooping Southern DFW</h2>
+          <p style="color:var(--muted);font-size:1.1rem">Based in DeSoto and serving eight nearby cities. If you're in one of them, there's a good chance we're already on your street.</p>
           <div class="area-tags" id="areaTags"></div>
           <form class="zip-check" id="zipCheck">
             <input id="zipQuick" inputmode="numeric" maxlength="5" placeholder="Check your zip code" aria-label="Zip code">
@@ -671,15 +706,14 @@
             <path d="M30 200 C 110 170, 160 230, 250 190 S 360 150, 380 170" stroke="#bfe3c7" stroke-width="10" fill="none" stroke-linecap="round"/>
             <path d="M200 20 C 190 120, 230 200, 200 340" stroke="#f1e2cf" stroke-width="8" fill="none" stroke-linecap="round"/>
             <g font-family="Inter" font-size="11" font-weight="700" fill="#1d2a21">
-              <g class="pin" style="--d:.1s"><circle class="ring" cx="250" cy="60" r="10" fill="#2f9e44"/><circle cx="250" cy="60" r="7" fill="#2f9e44"/><text x="262" y="64">Frisco</text></g>
-              <g class="pin" style="--d:.2s"><circle cx="270" cy="100" r="7" fill="#2f9e44"/><text x="282" y="104">Plano</text></g>
-              <g class="pin" style="--d:.3s"><circle cx="150" cy="185" r="7" fill="#2f9e44"/><text x="96" y="176">Arlington</text></g>
-              <g class="pin" style="--d:.4s"><circle cx="205" cy="165" r="7" fill="#2f9e44"/><text x="216" y="160">Grand Prairie</text></g>
-              <g class="pin" style="--d:.5s"><circle class="ring" cx="140" cy="245" r="10" fill="#6b4423"/><circle cx="140" cy="245" r="7" fill="#6b4423"/><text x="74" y="249">Mansfield</text></g>
-              <g class="pin" style="--d:.6s"><circle cx="235" cy="230" r="7" fill="#2f9e44"/><text x="246" y="234">DeSoto</text></g>
-              <g class="pin" style="--d:.7s"><circle cx="215" cy="265" r="7" fill="#2f9e44"/><text x="226" y="269">Red Oak</text></g>
-              <g class="pin" style="--d:.8s"><circle cx="175" cy="285" r="7" fill="#2f9e44"/><text x="100" y="300">Midlothian</text></g>
-              <g class="pin" style="--d:.9s"><circle cx="230" cy="315" r="7" fill="#2f9e44"/><text x="242" y="319">Waxahachie</text></g>
+              <g class="pin" style="--d:0.1s"><circle cx="175" cy="70" r="7" fill="#2f9e44"/><text x="187" y="74">Duncanville</text></g>
+              <g class="pin" style="--d:0.2s"><circle cx="310" cy="110" r="7" fill="#2f9e44"/><text x="322" y="114">Lancaster</text></g>
+              <g class="pin" style="--d:0.3s"><circle cx="105" cy="125" r="7" fill="#2f9e44"/><text x="40" y="129">Cedar Hill</text></g>
+              <g class="pin" style="--d:0.4s"><circle class="ring" cx="220" cy="135" r="10" fill="#6b4423"/><circle cx="220" cy="135" r="7" fill="#6b4423"/><text x="232" y="139">DeSoto (home)</text></g>
+              <g class="pin" style="--d:0.5s"><circle cx="230" cy="200" r="7" fill="#2f9e44"/><text x="242" y="204">Glenn Heights</text></g>
+              <g class="pin" style="--d:0.6s"><circle cx="160" cy="235" r="7" fill="#2f9e44"/><text x="110" y="239">Ovilla</text></g>
+              <g class="pin" style="--d:0.7s"><circle cx="275" cy="250" r="7" fill="#2f9e44"/><text x="287" y="254">Red Oak</text></g>
+              <g class="pin" style="--d:0.8s"><circle class="ring" cx="95" cy="295" r="10" fill="#2f9e44"/><circle cx="95" cy="295" r="7" fill="#2f9e44"/><text x="108" y="299">Midlothian</text></g>
             </g>
           </svg>
         </div>
@@ -697,7 +731,9 @@
           <details class="reveal"><summary>Do I need to be home during the cleanup?<i></i></summary><div class="faq-body"><p>Nope! Just make sure we can get into the yard and that your dogs are inside or secured. We'll close and latch the gate when we leave.</p></div></details>
           <details class="reveal" style="--d:.05s"><summary>Is there a contract?<i></i></summary><div class="faq-body"><p>Never. Recurring plans are simply prepaid month to month. Pause or cancel whenever you need to.</p></div></details>
           <details class="reveal" style="--d:.08s"><summary>How much does it cost?<i></i></summary><div class="faq-body"><p>It depends on your schedule and how many dogs you have. Fill out the <a href="#estimate">free quote form</a> and you'll see your price instantly. One-time cleanups are quoted individually by email.</p></div></details>
-          <details class="reveal" style="--d:.1s"><summary>What do you do with the waste?<i></i></summary><div class="faq-body"><p>We bag everything up and haul it away with us, so there's nothing left behind in your trash can.</p></div></details>
+          <details class="reveal" style="--d:.1s"><summary>How will I know you came?<i></i></summary><div class="faq-body"><p>You'll get a text when we're on the way and another when the yard is done, plus a photo of your closed gate.</p></div></details>
+          <details class="reveal" style="--d:.1s"><summary>What if my yard has heavy buildup?<i></i></summary><div class="faq-body"><p>If it's been a while, your first visit may need a one-time cleanup first. Just tell us when the yard was last cleaned and we'll include it in your quote.</p></div></details>
+          <details class="reveal" style="--d:.1s"><summary>What do you do with the waste?<i></i></summary><div class="faq-body"><p>We double-bag everything and place it in your outdoor trash bin, so it goes out with your regular pickup.</p></div></details>
           <details class="reveal" style="--d:.15s"><summary>What if it rains on my service day?<i></i></summary><div class="faq-body"><p>Light rain doesn't stop us. For severe weather we'll reschedule and let you know right away.</p></div></details>
           <details class="reveal" style="--d:.2s"><summary>How do I get started?<i></i></summary><div class="faq-body"><p>Get your <a href="#estimate">free quote</a>, then tap "Start service" and fill out a short intake form. We'll email you a payment link, and once it's paid we'll send your first scheduled cleanup date.</p></div></details>
         </div>
@@ -718,15 +754,15 @@
 
   <footer>
     <div class="wrap">
-      <a href="#top" class="logo">Poop Savvy</a>
-      <p>Family-owned pet waste removal · Southern DFW<br><a href="mailto:info@poop-savvy.com">info@poop-savvy.com</a></p>
-      <p>© <span id="year"></span> Poop Savvy. All rights reserved.</p>
+      <a href="#top" class="logo"><span class="logo-text">Dog Poop Removal<small>Near You</small></span></a>
+      <p>Family-owned in DeSoto · Serving Southern DFW<br>Call or text <a href="tel:+12147026169">214.702.6169</a> · <a href="mailto:contact@dogpoopremovalnearyou.com">contact@dogpoopremovalnearyou.com</a></p>
+      <p>© <span id="year"></span> Dog Poop Removal Near You.<br>Operated by Reed &amp; Reed Ventures LLC.</p>
     </div>
   </footer>
 
   <div class="sticky-cta" id="stickyCta">
     <a href="#estimate" class="btn btn-primary">Free quote</a>
-    <a href="mailto:info@poop-savvy.com" class="btn btn-ghost">Email us</a>
+    <a href="tel:+12147026169" class="btn btn-ghost">📞 Call / text</a>
   </div>
 
   <script>
@@ -735,16 +771,12 @@
     const $$ = s => document.querySelectorAll(s);
 
     /* ---------- Data ---------- */
-    const BASE = 20, EXTRA_DOG = 5, DEODORIZE = 10;
-    const perVisit = dogs => BASE + EXTRA_DOG * Math.max(0, dogs - 2);
-    const serviceZips = new Set([
-      "75033", "75034", "75035", "75036", "75068", "75023", "75024", "75025", "75074", "75075", "75093", "75094",
-      "75050", "75051", "75052", "75053", "75054", "75104", "75115", "75123", "75116", "75137", "75138", "75134",
-      "75146", "75154", "75165", "75167", "75168", "76001", "76002", "76006", "76010", "76011", "76012", "76013",
-      "76014", "76015", "76016", "76017", "76018", "76040", "76060", "76065", "76063"
-    ]);
-    const cities = ["Arlington", "Mansfield", "Grand Prairie", "Frisco", "Plano", "Little Elm", "Cedar Hill", "DeSoto",
-      "Duncanville", "Lancaster", "Red Oak", "Midlothian", "Waxahachie", "Kennedale", "Euless"];
+    // Per-visit prices for 1-2 dogs; keep in sync with intake.html.
+    const BASE = { weekly: 22, twice: 28 }, EXTRA_DOG = 5, DEODORIZE = 10;
+    const perVisit = (service, dogs) => BASE[service] + EXTRA_DOG * Math.max(0, dogs - 2);
+    // Zips for DeSoto, Lancaster, Duncanville, Cedar Hill, Glenn Heights, Red Oak, Ovilla and Midlothian.
+    const serviceZips = new Set(["75115", "75123", "75134", "75146", "75116", "75137", "75138", "75104", "75106", "75154", "76065"]);
+    const cities = ["DeSoto", "Lancaster", "Duncanville", "Cedar Hill", "Glenn Heights", "Red Oak", "Ovilla", "Midlothian"];
 
     /* ---------- Cities marquee + tags ---------- */
     const track = $('#marquee');
@@ -922,7 +954,7 @@
       setMsg(msg, '', true);
 
       const service = form.service.value, dogs = +form.dogs.value, deodorize = $('#deodorize').checked;
-      const price = service === 'onetime' ? null : perVisit(dogs) + (deodorize ? DEODORIZE : 0);
+      const price = service === 'onetime' ? null : perVisit(service, dogs) + (deodorize ? DEODORIZE : 0);
       showQuote({ name, email, phone, zip, service, dogs, deodorize, price });
 
       // Send the lead in the background so the visitor never waits on it.
@@ -950,7 +982,7 @@
         form.zipcode.value = zip;
         showForm();
       } else {
-        setMsg(el, `We're not in ${zip} yet, but email info@poop-savvy.com and we'll let you know when we are.`);
+        setMsg(el, `We're not in ${zip} yet, but email contact@dogpoopremovalnearyou.com and we'll let you know when we are.`);
       }
     });
 

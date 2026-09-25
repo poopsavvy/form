@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Start Service | Poop Savvy</title>
-  <meta name="description" content="Start your Poop Savvy dog poop removal service. Tell us about your yard and we'll email your payment link.">
+  <title>Start Service | Dog Poop Removal Near You</title>
+  <meta name="description" content="Start your Dog Poop Removal Near You service. Tell us about your yard and we'll email your payment link.">
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +45,8 @@
     .logo { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; font-weight: 700; color: var(--green-dark); text-decoration: none; }
     .logo-mark { width: 40px; height: 40px; border-radius: 12px; background: var(--green); display: grid; place-items: center; transition: transform .5s var(--ease); }
     .logo:hover .logo-mark { transform: rotate(-12deg) scale(1.08); }
+    .logo-text { font-size: 1.2rem; line-height: 1; }
+    .logo-text small { display: block; font-size: .72em; color: var(--brown); margin-top: 2px; }
     .back { font-weight: 600; text-decoration: none; color: var(--green-dark); }
     .back:hover { text-decoration: underline; }
 
@@ -166,11 +168,11 @@
 <body>
   <header>
     <div class="wrap">
-      <a href="index.html" class="logo" aria-label="Poop Savvy home">
+      <a href="index.html" class="logo" aria-label="Dog Poop Removal Near You home">
         <span class="logo-mark" aria-hidden="true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><ellipse cx="6" cy="9" rx="2.2" ry="2.8"/><ellipse cx="10.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="15.5" cy="5.5" rx="2.2" ry="2.8"/><ellipse cx="19.5" cy="9.5" rx="2" ry="2.6"/><path d="M12.8 11c-3 0-6.3 4.4-6.3 7 0 1.8 1.4 2.6 3 2.6 1.3 0 2.2-.6 3.3-.6s2 .6 3.3.6c1.6 0 3-.8 3-2.6 0-2.6-3.3-7-6.3-7z"/></svg>
         </span>
-        Poop Savvy
+        <span class="logo-text">Dog Poop Removal<small>Near You</small></span>
       </a>
       <a href="index.html#estimate" class="back">← Back to quote</a>
     </div>
@@ -197,7 +199,7 @@
           <div class="amount">$<span id="qAmount">0</span> <small>/visit</small></div>
           <div class="meta" id="qMeta"></div>
         </div>
-        <div class="meta">Prepaid monthly<br>No contracts</div>
+        <div class="meta">Prepaid monthly<br>No contracts<br><strong style="color:var(--lime)">🎁 First week free</strong></div>
       </section>
 
       <section class="card rise" style="--d:.2s">
@@ -264,6 +266,16 @@
             </select>
           </div>
           <div class="field">
+            <label for="lastClean">Last time the yard was cleaned</label>
+            <select id="lastClean" name="lastClean" required>
+              <option value="">Choose one</option>
+              <option>Within the last week</option>
+              <option>Within 30 days</option>
+              <option>More than 30 days ago</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+          <div class="field">
             <label for="dogsDuring">Dogs during visits</label>
             <select id="dogsDuring" name="dogsDuring" required>
               <option value="">Choose one</option>
@@ -300,7 +312,7 @@
       </section>
 
       <section class="card rise" style="--d:.6s">
-        <label class="agree"><input type="checkbox" id="agree" required> <span>I understand recurring service is prepaid monthly, and I'll receive a payment link by email before my first cleanup.</span></label>
+        <label class="agree"><input type="checkbox" id="agree" required> <span>I understand recurring service is prepaid monthly, and I'll receive a payment link by email before my first cleanup. If the yard has heavy buildup, the first visit may need a one-time cleanup, which you'll quote before I pay.</span></label>
         <div style="margin-top:20px"><button type="submit" class="btn btn-primary submit" id="submitBtn"><span id="submitLabel">Send my details</span> <span class="arrow">→</span></button></div>
         <p class="msg" id="msg" aria-live="polite"></p>
       </section>
@@ -310,13 +322,13 @@
       <span class="big">🎉</span>
       <h2>You're all set!</h2>
       <p id="successText">We got your details. Watch your inbox for your payment link, and we'll confirm your first cleanup date once it's paid.</p>
-      <p>Questions? Email <a href="mailto:info@poop-savvy.com">info@poop-savvy.com</a></p>
+      <p>Questions? Call or text <a href="tel:+12147026169">214.702.6169</a> or email <a href="mailto:contact@dogpoopremovalnearyou.com">contact@dogpoopremovalnearyou.com</a></p>
       <div style="margin-top:20px"><a href="index.html" class="btn btn-ghost">Back to home</a></div>
     </section>
   </main>
 
   <footer>
-    Poop Savvy · Family-owned pet waste removal · Southern DFW · <a href="mailto:info@poop-savvy.com">info@poop-savvy.com</a>
+    Dog Poop Removal Near You · Family-owned in DeSoto · <a href="tel:+12147026169">214.702.6169</a> · <a href="mailto:contact@dogpoopremovalnearyou.com">contact@dogpoopremovalnearyou.com</a>
   </footer>
 
   <script>
@@ -324,14 +336,10 @@
     const $ = s => document.querySelector(s);
 
     // Keep pricing and zips in sync with index.html.
-    const BASE = 20, EXTRA_DOG = 5, DEODORIZE = 10;
-    const perVisit = dogs => BASE + EXTRA_DOG * Math.max(0, dogs - 2);
-    const serviceZips = new Set([
-      "75033", "75034", "75035", "75036", "75068", "75023", "75024", "75025", "75074", "75075", "75093", "75094",
-      "75050", "75051", "75052", "75053", "75054", "75104", "75115", "75123", "75116", "75137", "75138", "75134",
-      "75146", "75154", "75165", "75167", "75168", "76001", "76002", "76006", "76010", "76011", "76012", "76013",
-      "76014", "76015", "76016", "76017", "76018", "76040", "76060", "76065", "76063"
-    ]);
+    const BASE = { weekly: 22, twice: 28 }, EXTRA_DOG = 5, DEODORIZE = 10;
+    const perVisit = (service, dogs) => BASE[service] + EXTRA_DOG * Math.max(0, dogs - 2);
+    // Zips for DeSoto, Lancaster, Duncanville, Cedar Hill, Glenn Heights, Red Oak, Ovilla and Midlothian.
+    const serviceZips = new Set(["75115", "75123", "75134", "75146", "75116", "75137", "75138", "75104", "75106", "75154", "76065"]);
     const serviceNames = { weekly: 'Weekly', twice: 'Twice a month', onetime: 'One-time cleanup' };
 
     // Intake submissions go to the owner through the same EmailJS account as the quote form.
@@ -357,7 +365,7 @@
     let shown = 0;
     function currentPlan() {
       const service = form.service.value, dogs = +form.dogs.value, deodorize = $('#deodorize').checked;
-      const price = service === 'onetime' ? null : perVisit(dogs) + (deodorize ? DEODORIZE : 0);
+      const price = service === 'onetime' ? null : perVisit(service, dogs) + (deodorize ? DEODORIZE : 0);
       return { service, dogs, deodorize, price };
     }
     function animateTo(el, to) {
@@ -398,12 +406,12 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
       const v = id => form[id].value.trim();
-      for (const id of ['name', 'email', 'phone', 'street', 'city', 'zip', 'yard', 'dogsDuring', 'access']) {
+      for (const id of ['name', 'email', 'phone', 'street', 'city', 'zip', 'yard', 'lastClean', 'dogsDuring', 'access']) {
         if (!v(id)) return fail(form[id], 'Please fill out the highlighted field.');
       }
       if (!/^\S+@\S+\.\S+$/.test(v('email'))) return fail(form.email, 'Please enter a valid email address.');
       if (v('phone').replace(/\D/g, '').length < 10) return fail(form.phone, 'Please enter a 10-digit phone number.');
-      if (!serviceZips.has(v('zip'))) return fail(form.zip, `Sorry, we don't service ${v('zip')} yet. Email info@poop-savvy.com and we'll let you know when we do.`);
+      if (!serviceZips.has(v('zip'))) return fail(form.zip, `Sorry, we don't service ${v('zip')} yet. Email contact@dogpoopremovalnearyou.com and we'll let you know when we do.`);
       if (!$('#agree').checked) return fail($('#agree'), 'Please check the box to continue.');
 
       const p = currentPlan();
@@ -418,6 +426,7 @@
         `Deodorize: ${p.deodorize ? 'yes' : 'no'}`,
         `Quote: ${quoteText}`,
         `Yard size: ${v('yard')}`,
+        `Last cleaned: ${v('lastClean')}`,
         `Dogs during visits: ${v('dogsDuring')}`,
         `Gate / access: ${v('access')}`,
         `Preferred day: ${v('day')}`,
@@ -430,7 +439,7 @@
       btn.disabled = true; label.textContent = 'Sending…';
       msg.className = 'msg'; msg.textContent = '';
 
-      const mailto = `mailto:info@poop-savvy.com?subject=${encodeURIComponent('New service sign-up')}&body=${encodeURIComponent(details)}`;
+      const mailto = `mailto:contact@dogpoopremovalnearyou.com?subject=${encodeURIComponent('New service sign-up')}&body=${encodeURIComponent(details)}`;
       const sendFailed = err => {
         console.error('EmailJS error:', err);
         btn.disabled = false; label.textContent = 'Send my details';
@@ -446,7 +455,7 @@
         dogs: p.dogs === 2 ? '1-2' : String(p.dogs),
         deodorize: p.deodorize ? 'yes' : 'no',
         address: `${v('street')}, ${v('city')} ${v('zip')}`,
-        dog_info: v('dogInfo'), yard: v('yard'), dogs_during: v('dogsDuring'), access: v('access'),
+        dog_info: v('dogInfo'), yard: v('yard'), last_cleaned: v('lastClean'), dogs_during: v('dogsDuring'), access: v('access'),
         day: v('day'), start: v('start'), source: v('source'), notes: v('notes'),
         message: details,
         // The existing EmailJS template shows {{estimate}}, so the full intake goes there too
