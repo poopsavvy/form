@@ -354,6 +354,7 @@
     footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; align-items: center; }
     footer a { text-decoration: none; font-weight: 600; color: var(--green-dark); }
     footer a:hover { text-decoration: underline; }
+    footer .family { flex-basis: 100%; text-align: center; font-size: .9rem; padding-top: 22px; border-top: 1px solid #e4ece6; }
 
     /* ---------- Mobile sticky bar / to-top ---------- */
     .sticky-cta { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 40; display: none; gap: 10px; transform: translateY(150%); transition: transform .45s var(--ease); }
@@ -504,7 +505,7 @@
           <div class="step reveal" style="--d:.15s">
             <div class="step-num">📅<b>2</b></div>
             <h3>Quick sign-up</h3>
-            <p>Send us your info and we'll email your payment link and first cleanup date.</p>
+            <p>Send us your info and we'll email your payment link, service day and start date.</p>
           </div>
           <div class="step reveal" style="--d:.3s">
             <div class="step-num">🐶<b>3</b></div>
@@ -637,7 +638,7 @@
             <a class="btn btn-primary" id="startBtn" href="intake.html">Start service <span class="arrow">→</span></a>
             <button type="button" class="btn btn-ghost" id="editBtn">Edit my answers</button>
           </div>
-          <p class="quote-note" id="quoteNote">Next, we'll grab a few details (address, gate access, preferred day) and email your payment link.</p>
+          <p class="quote-note" id="quoteNote">Next, we'll grab a few details (address, gate access, yard) and email your payment link.</p>
         </div>
         </div>
       </div>
@@ -735,7 +736,7 @@
           <details class="reveal" style="--d:.1s"><summary>What if my yard has heavy buildup?<i></i></summary><div class="faq-body"><p>If it's been a while, your first visit may need a one-time cleanup first. Just tell us when the yard was last cleaned and we'll include it in your quote.</p></div></details>
           <details class="reveal" style="--d:.1s"><summary>What do you do with the waste?<i></i></summary><div class="faq-body"><p>We double-bag everything and place it in your outdoor trash bin, so it goes out with your regular pickup.</p></div></details>
           <details class="reveal" style="--d:.15s"><summary>What if it rains on my service day?<i></i></summary><div class="faq-body"><p>Light rain doesn't stop us. For severe weather we'll reschedule and let you know right away.</p></div></details>
-          <details class="reveal" style="--d:.2s"><summary>How do I get started?<i></i></summary><div class="faq-body"><p>Get your <a href="#estimate">free quote</a>, then tap "Start service" and fill out a short intake form. We'll email you a payment link, and once it's paid we'll send your first scheduled cleanup date.</p></div></details>
+          <details class="reveal" style="--d:.2s"><summary>How do I get started?<i></i></summary><div class="faq-body"><p>Get your <a href="#estimate">free quote</a>, then tap "Start service" and fill out a short intake form. We'll email your payment link along with your assigned service day and start date.</p></div></details>
         </div>
       </div>
     </section>
@@ -757,6 +758,7 @@
       <a href="#top" class="logo"><span class="logo-text">Dog Poop Removal<small>Near You</small></span></a>
       <p>Family-owned in DeSoto · Serving Southern DFW<br>Call or text <a href="tel:+12147026169">214.702.6169</a> · <a href="mailto:contact@dogpoopremovalnearyou.com">contact@dogpoopremovalnearyou.com</a></p>
       <p>© <span id="year"></span> Dog Poop Removal Near You.<br>Operated by Reed &amp; Reed Ventures LLC.</p>
+      <p class="family">Dog Poop Removal Near You is part of the <a href="https://poop-savvy.com" rel="noopener">Poop Savvy</a> family, run by the same local owners.</p>
     </div>
   </footer>
 
@@ -926,7 +928,7 @@
       $('#startBtn').hidden = oneTime;
       $('#quoteNote').textContent = oneTime
         ? `One-time cleanups are priced by yard size and buildup, so we'll email your custom quote to ${q.email} shortly.`
-        : "Like it? Tap Start service and we'll grab a few details (address, gate access, preferred day), then email your payment link.";
+        : "Like it? Tap Start service and we'll grab a few details (address, gate access, yard), then email your payment link with your service day and start date.";
       $('#quoteLines').innerHTML = [
         ['Service', serviceNames[q.service]],
         ['Dogs', q.dogs === 2 ? '1–2' : q.dogs],

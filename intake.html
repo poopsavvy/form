@@ -152,6 +152,7 @@
 
     footer { text-align: center; color: var(--muted); padding: 30px 0 50px; }
     footer a { color: var(--green-dark); font-weight: 600; text-decoration: none; }
+    footer .family { font-size: .88rem; margin-top: 10px; }
 
     @media (max-width: 640px) {
       .grid { grid-template-columns: 1fr; }
@@ -291,16 +292,8 @@
 
       <section class="card rise" style="--d:.52s">
         <h2><span class="ico">📅</span>Scheduling</h2>
-        <p class="sub">We'll do our best to match your preferences.</p>
+        <p class="sub">We'll assign your service day and start date based on our route, and send them with your payment link.</p>
         <div class="grid">
-          <div class="field">
-            <label for="day">Preferred service day</label>
-            <select id="day" name="day">
-              <option>No preference</option>
-              <option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option>
-            </select>
-          </div>
-          <div class="field"><label for="start">Preferred start date <span class="opt">(optional)</span></label><input id="start" name="start" type="date"></div>
           <div class="field full">
             <label for="source">How did you hear about us? <span class="opt">(optional)</span></label>
             <select id="source" name="source">
@@ -321,7 +314,7 @@
     <section class="card success" id="success" hidden aria-live="polite">
       <span class="big">🎉</span>
       <h2>You're all set!</h2>
-      <p id="successText">We got your details. Watch your inbox for your payment link, and we'll confirm your first cleanup date once it's paid.</p>
+      <p id="successText">We got your details. Watch your inbox for your payment link along with your service day and start date.</p>
       <p>Questions? Call or text <a href="tel:+12147026169">214.702.6169</a> or email <a href="mailto:contact@dogpoopremovalnearyou.com">contact@dogpoopremovalnearyou.com</a></p>
       <div style="margin-top:20px"><a href="index.html" class="btn btn-ghost">Back to home</a></div>
     </section>
@@ -329,6 +322,7 @@
 
   <footer>
     Dog Poop Removal Near You · Family-owned in DeSoto · <a href="tel:+12147026169">214.702.6169</a> · <a href="mailto:contact@dogpoopremovalnearyou.com">contact@dogpoopremovalnearyou.com</a>
+    <p class="family">Dog Poop Removal Near You is part of the <a href="https://poop-savvy.com" rel="noopener">Poop Savvy</a> family, run by the same local owners.</p>
   </footer>
 
   <script>
@@ -359,7 +353,6 @@
     if (q.get('service')) setRadio('service', q.get('service'));
     if (q.get('dogs')) setRadio('dogs', q.get('dogs'));
     $('#deodorize').checked = q.get('deodorize') === '1';
-    form.start.min = new Date().toISOString().slice(0, 10);
 
     /* ---------- Quote summary (only after a quote was given) ---------- */
     let shown = 0;
@@ -429,8 +422,6 @@
         `Last cleaned: ${v('lastClean')}`,
         `Dogs during visits: ${v('dogsDuring')}`,
         `Gate / access: ${v('access')}`,
-        `Preferred day: ${v('day')}`,
-        `Start date: ${v('start') || 'As soon as possible'}`,
         `Heard about us: ${v('source') || 'Not given'}`,
         `Notes: ${v('notes') || 'None'}`
       ].join('\n');
@@ -456,7 +447,7 @@
         deodorize: p.deodorize ? 'yes' : 'no',
         address: `${v('street')}, ${v('city')} ${v('zip')}`,
         dog_info: v('dogInfo'), yard: v('yard'), last_cleaned: v('lastClean'), dogs_during: v('dogsDuring'), access: v('access'),
-        day: v('day'), start: v('start'), source: v('source'), notes: v('notes'),
+        source: v('source'), notes: v('notes'),
         message: details,
         // The existing EmailJS template shows {{estimate}}, so the full intake goes there too
         // and nothing is lost until the template is updated to show the new fields.
