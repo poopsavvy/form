@@ -104,6 +104,7 @@
     .field textarea { min-height: 90px; resize: vertical; }
     .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px rgba(47,158,68,.15); }
     .field.invalid input, .field.invalid select { border-color: #c0392b; animation: shake .4s; }
+    .field.invalid .choice span { border-color: #c0392b; }
     @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
     .choices { display: grid; gap: 8px; margin-top: 6px; }
     .choices.three { grid-template-columns: repeat(3, 1fr); }
@@ -292,8 +293,17 @@
 
       <section class="card rise" style="--d:.52s">
         <h2><span class="ico">📅</span>Scheduling</h2>
-        <p class="sub">We'll assign your service day and start date based on our route, and send them with your payment link.</p>
+        <p class="sub">We'll set your service day and start date based on our route, and send them with your payment link.</p>
         <div class="grid">
+          <fieldset class="field full">
+            <legend class="legend">On your first service date, how would you like us to let you know we've arrived?</legend>
+            <div class="choices four">
+              <label class="choice"><input type="radio" name="arrival" value="Knock on the door"><span>Knock 🚪</span></label>
+              <label class="choice"><input type="radio" name="arrival" value="Text when we arrive"><span>Text 📱</span></label>
+              <label class="choice"><input type="radio" name="arrival" value="Knock and text"><span>Both</span></label>
+              <label class="choice"><input type="radio" name="arrival" value="No knock or text"><span>Neither</span></label>
+            </div>
+          </fieldset>
           <div class="field full">
             <label for="source">How did you hear about us? <span class="opt">(optional)</span></label>
             <select id="source" name="source">
@@ -405,6 +415,7 @@
       if (!/^\S+@\S+\.\S+$/.test(v('email'))) return fail(form.email, 'Please enter a valid email address.');
       if (v('phone').replace(/\D/g, '').length < 10) return fail(form.phone, 'Please enter a 10-digit phone number.');
       if (!serviceZips.has(v('zip'))) return fail(form.zip, `Sorry, we don't service ${v('zip')} yet. Email contact@dogpoopremovalnearyou.com and we'll let you know when we do.`);
+      if (!form.arrival.value) return fail(form.querySelector('input[name=arrival]'), 'Please choose how we should let you know we\'ve arrived on your first service date.');
       if (!$('#agree').checked) return fail($('#agree'), 'Please check the box to continue.');
 
       const p = currentPlan();
@@ -422,6 +433,7 @@
         `Last cleaned: ${v('lastClean')}`,
         `Dogs during visits: ${v('dogsDuring')}`,
         `Gate / access: ${v('access')}`,
+        `First service arrival: ${form.arrival.value}`,
         `Heard about us: ${v('source') || 'Not given'}`,
         `Notes: ${v('notes') || 'None'}`
       ].join('\n');
@@ -447,7 +459,7 @@
         deodorize: p.deodorize ? 'yes' : 'no',
         address: `${v('street')}, ${v('city')} ${v('zip')}`,
         dog_info: v('dogInfo'), yard: v('yard'), last_cleaned: v('lastClean'), dogs_during: v('dogsDuring'), access: v('access'),
-        source: v('source'), notes: v('notes'),
+        arrival: form.arrival.value, source: v('source'), notes: v('notes'),
         message: details,
         // The existing EmailJS template shows {{estimate}}, so the full intake goes there too
         // and nothing is lost until the template is updated to show the new fields.
