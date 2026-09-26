@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /intake.html
+Sitemap: https://dogpoopremovalnearyou.com/sitemap.xml
