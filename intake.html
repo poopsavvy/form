@@ -198,7 +198,8 @@
       <section class="card quote rise" style="--d:.15s" id="quoteBox" hidden aria-live="polite">
         <div>
           <div class="label">Your quote</div>
-          <div class="amount">$<span id="qAmount">0</span> <small>/visit</small></div>
+          <div class="amount">$<span id="qAmount">0</span> <small>/month</small></div>
+          <div class="meta" id="qPerVisit"></div>
           <div class="meta" id="qMeta"></div>
         </div>
         <div class="meta">Prepaid monthly<br>No contracts<br><strong style="color:var(--lime)">🎁 First week free</strong></div>
@@ -341,6 +342,7 @@
 
     // Keep pricing and zips in sync with index.html.
     const BASE = { weekly: 22, twice: 28 }, EXTRA_DOG = 5, DEODORIZE = 10;
+    const VISITS = { weekly: 4, twice: 2 };
     const perVisit = (service, dogs) => BASE[service] + EXTRA_DOG * Math.max(0, dogs - 2);
     // Zips for DeSoto, Lancaster, Duncanville, Cedar Hill, Glenn Heights, Red Oak, Ovilla and Midlothian.
     const serviceZips = new Set(["75115", "75123", "75134", "75146", "75116", "75137", "75138", "75104", "75106", "75154", "76065"]);
@@ -386,9 +388,12 @@
       const p = currentPlan(), box = $('#quoteBox');
       box.hidden = p.price === null;
       if (p.price === null) return;
+      const visits = VISITS[p.service] || 4;
+      const monthly = p.price * visits;
+      $('#qPerVisit').textContent = `That's only $${p.price} per visit`;
       $('#qMeta').textContent = `${serviceNames[p.service]} · ${p.dogs === 2 ? '1–2' : p.dogs} dogs${p.deodorize ? ' · deodorize' : ''}`;
       box.classList.remove('bump'); void box.offsetWidth; box.classList.add('bump');
-      animateTo($('#qAmount'), p.price);
+      animateTo($('#qAmount'), monthly);
     }
     form.addEventListener('change', e => { if (['service', 'dogs', 'deodorize'].includes(e.target.name)) updateQuote(); });
     updateQuote();
@@ -419,7 +424,7 @@
       if (!$('#agree').checked) return fail($('#agree'), 'Please check the box to continue.');
 
       const p = currentPlan();
-      const quoteText = p.price === null ? 'One-time cleanup: needs a custom quote' : `$${p.price.toFixed(2)} per visit, prepaid monthly`;
+      const quoteText = p.price === null ? 'One-time cleanup: needs a custom quote' : (() => { const v = VISITS[p.service] || 4; return `$${p.price * v}/month ($${p.price.toFixed(2)}/visit × ${v}), prepaid monthly`; })();
       const details = [
         `Name: ${v('name')}`,
         `Email: ${v('email')}`,

@@ -235,7 +235,8 @@
           <span class="eyebrow" id="quoteEyebrow">Your quote</span>
           <h3 id="quoteHello">Here's your quote</h3>
           <div class="result" id="result">
-            <div class="amount" id="amountWrap">$<span id="amount">0</span> <small>/visit</small></div>
+            <div class="amount" id="amountWrap">$<span id="amount">0</span> <small>/month</small></div>
+            <small id="perVisitLine" style="color:var(--muted)">That's only $0 per visit</small>
             <small id="billing" style="color:var(--muted)">Prepaid monthly · no contracts</small>
             <span class="offer">🎁 First week free when you prepay your first month</span>
           </div>
@@ -385,6 +386,8 @@
     /* ---------- Data ---------- */
     // Per-visit prices for 1-2 dogs; keep in sync with intake.html.
     const BASE = { weekly: 22, twice: 28 }, EXTRA_DOG = 5, DEODORIZE = 10;
+    // Prepaid monthly = per-visit × visits in a typical month.
+    const VISITS = { weekly: 4, twice: 2 };
     const perVisit = (service, dogs) => BASE[service] + EXTRA_DOG * Math.max(0, dogs - 2);
     // Zips for DeSoto, Lancaster, Duncanville, Cedar Hill, Glenn Heights, Red Oak, Ovilla and Midlothian.
     const serviceZips = new Set(["75115", "75123", "75134", "75146", "75116", "75137", "75138", "75104", "75106", "75154", "76065"]);
@@ -556,8 +559,11 @@
       quoteCard.hidden = false;
       quoteCard.style.animation = 'none'; void quoteCard.offsetWidth; quoteCard.style.animation = '';
       if (!oneTime) {
-        $('#amountWrap').innerHTML = '$<span id="amount">0</span> <small>/visit</small>';
-        countTo($('#amount'), q.price);
+        const visits = VISITS[q.service] || 4;
+        const monthly = q.price * visits;
+        $('#amountWrap').innerHTML = '$<span id="amount">0</span> <small>/month</small>';
+        $('#perVisitLine').textContent = `That's only $${q.price} per visit · ${serviceNames[q.service].toLowerCase()}`;
+        countTo($('#amount'), monthly);
       }
       quoteCard.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
     }
@@ -582,7 +588,7 @@
         service: serviceNames[service],
         dogs: dogs === 2 ? '1-2' : String(dogs),
         deodorize: deodorize ? 'yes' : 'no',
-        estimate: price === null ? 'One-time cleanup: needs a custom quote' : `Quoted $${price.toFixed(2)} per visit, prepaid monthly`
+        estimate: price === null ? 'One-time cleanup: needs a custom quote' : (() => { const v = VISITS[service] || 4; const m = price * v; return `Quoted $${m.toFixed(2)}/month ($${price.toFixed(2)}/visit × ${v}), prepaid monthly`; })()
       }).catch(err => console.error('EmailJS error:', err));
     });
 
