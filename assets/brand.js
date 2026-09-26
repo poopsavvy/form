@@ -24,7 +24,15 @@
     const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
     if (progress) progress.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
     if (nav) nav.classList.toggle('scrolled', y > 30);
-    if (sticky) sticky.classList.toggle('show', y > innerHeight * .6);
+    if (sticky) {
+      const est = document.querySelector('#estimate');
+      const submit = document.querySelector('#submitBtn');
+      const estRect = est ? est.getBoundingClientRect() : null;
+      const submitRect = submit ? submit.getBoundingClientRect() : null;
+      const estimateVisible = estRect && estRect.top < innerHeight && estRect.bottom > 0;
+      const submitNearSticky = submitRect && submitRect.bottom > innerHeight - 100 && submitRect.top < innerHeight;
+      sticky.classList.toggle('show', y > innerHeight * .6 && !estimateVisible && !submitNearSticky);
+    }
     if (stepsEl && line) {
       const r = stepsEl.getBoundingClientRect();
       line.style.setProperty('--p', Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .2))));

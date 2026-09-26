@@ -368,7 +368,7 @@
       <p>Family-owned in DeSoto · Serving Southern DFW<br>Call or text <a href="tel:+12147026169">214.702.6169</a> · <a href="mailto:contact@dogpoopremovalnearyou.com">contact@dogpoopremovalnearyou.com</a></p>
       <p>© <span id="year"></span> Dog Poop Removal Near You.<br>Operated by Reed &amp; Reed Ventures LLC.</p>
       <p class="footer-links"><b>Service areas:</b> <a href="dog-poop-removal-desoto-tx/">DeSoto</a> <a href="dog-poop-removal-lancaster-tx/">Lancaster</a> <a href="dog-poop-removal-duncanville-tx/">Duncanville</a> <a href="dog-poop-removal-cedar-hill-tx/">Cedar Hill</a> <a href="dog-poop-removal-glenn-heights-tx/">Glenn Heights</a> <a href="dog-poop-removal-red-oak-tx/">Red Oak</a> <a href="dog-poop-removal-ovilla-tx/">Ovilla</a> <a href="dog-poop-removal-midlothian-tx/">Midlothian</a> <a href="did-you-know/">Clean-yard guide</a></p>
-      <p class="family">Dog Poop Removal Near You is part of the <a href="https://poop-savvy.com" rel="noopener">Poop Savvy</a> family, run by the same local owners.</p>
+      <p class="family">Local weekly scooping for Southern DFW homeowners.</p>
     </div>
   </footer>
 
@@ -436,7 +436,11 @@
       progress.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
       nav.classList.toggle('scrolled', y > 30);
       const estTop = $('#estimate').getBoundingClientRect();
-      sticky.classList.toggle('show', y > innerHeight * .8 && !(estTop.top < innerHeight && estTop.bottom > 0));
+      const submit = $('#submitBtn');
+      const submitRect = submit ? submit.getBoundingClientRect() : null;
+      const estimateVisible = estTop.top < innerHeight && estTop.bottom > 0;
+      const submitNearSticky = submitRect && submitRect.bottom > innerHeight - 100 && submitRect.top < innerHeight;
+      sticky.classList.toggle('show', y > innerHeight * .8 && !estimateVisible && !submitNearSticky);
       const r = stepsEl.getBoundingClientRect();
       const p = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .2)));
       line.style.setProperty('--p', p);

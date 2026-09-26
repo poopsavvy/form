@@ -387,6 +387,8 @@ footer .family { flex-basis: 100%; text-align: center; font-size: .9rem; padding
   .choices.four { grid-template-columns: repeat(2, 1fr); }
   .stats { grid-template-columns: 1fr; gap: 28px; }
   .sticky-cta { display: flex; }
+  #estimate { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+  main { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
   .fc-1 { left: 0; } .fc-2 { right: 0; }
   .cta { padding: 56px 22px; }
   .hero { padding: 100px 0 110px; min-height: auto; }

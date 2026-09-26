@@ -114,7 +114,7 @@ def footer():
       <p>Family-owned in DeSoto · Serving Southern DFW<br>Call or text <a href="{TEL}">{PHONE}</a> · <a href="mailto:{EMAIL}">{EMAIL}</a></p>
       <p>© <span id="year">2026</span> Dog Poop Removal Near You.<br>Operated by Reed &amp; Reed Ventures LLC.</p>
       <p class="footer-links"><b>Service areas:</b> {cities} <a href="../did-you-know/">Clean-yard guide</a></p>
-      <p class="family">Dog Poop Removal Near You is part of the <a href="https://poop-savvy.com" rel="noopener">Poop Savvy</a> family, run by the same local owners.</p>
+      <p class="family">Local weekly scooping for Southern DFW homeowners.</p>
     </div>
   </footer>
 
