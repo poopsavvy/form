@@ -289,11 +289,11 @@ main, footer { overflow-x: clip; }
 .story p { color: var(--muted); font-size: 1.08rem; margin-bottom: 12px; }
 .story blockquote { margin-top: 20px; padding: 20px 24px; border-left: 5px solid var(--green); background: var(--green-soft); border-radius: 0 18px 18px 0; font-weight: 600; font-size: 1.08rem; }
 .story cite { display: block; margin-top: 8px; font-style: normal; font-weight: 500; color: var(--muted); font-size: .95rem; }
-.story-photo { position: relative; max-width: 460px; width: 100%; justify-self: center; margin: 0; }
+.story-photo { position: relative; max-width: 330px; width: 100%; justify-self: center; margin: 0; }
 .story-photo img { width: 100%; height: auto; display: block; border-radius: 28px; box-shadow: var(--shadow); transform: rotate(-2deg); transition: transform .5s var(--ease); }
 .story-photo:hover img { transform: rotate(0deg) scale(1.02); }
-.story-photo .story-badge { position: absolute; left: -26px; bottom: -26px; width: 42%; max-width: 170px; border: 5px solid var(--cream); }
-.story-photo .story-badge span { font-size: clamp(.95rem, 1.6vw, 1.15rem); }
+.story-photo .story-badge { position: absolute; left: -24px; bottom: -22px; width: 44%; max-width: 140px; border: 5px solid var(--cream); }
+.story-photo .story-badge span { font-size: clamp(.8rem, 1.3vw, .98rem); }
 .story-badge { aspect-ratio: 1; max-width: 300px; width: 100%; justify-self: center; border-radius: 50%; background: var(--brown); color: var(--white); display: grid; place-items: center; text-align: center; box-shadow: var(--shadow); animation: spinSlow 18s linear infinite; }
 .story-badge span { font-family: 'Fredoka'; font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 700; line-height: 1.1; text-transform: uppercase; animation: spinSlow 18s linear infinite reverse; }
 @keyframes spinSlow { to { transform: rotate(360deg); } }
@@ -358,7 +358,7 @@ footer .family { flex-basis: 100%; text-align: center; font-size: .9rem; padding
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   .hero .wrap, .estimator, .areas, .story { grid-template-columns: 1fr; }
-  .story-photo { max-width: 380px; }
+  .story-photo { max-width: 250px; }
   .story-photo .story-badge { left: -8px; bottom: -18px; }
   .hero { text-align: center; padding-top: 120px; }
   .hero p.lead { margin-inline: auto; }
