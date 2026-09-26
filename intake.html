@@ -293,15 +293,10 @@
 
       <section class="card rise" style="--d:.52s">
         <h2><span class="ico">📅</span>Scheduling</h2>
-        <p class="sub">We'll confirm your service day and start date based on our route, and send them with your payment link.</p>
+        <p class="sub">We'll set your service day and start date based on our route, and send them with your payment link.</p>
         <div class="grid">
-          <div class="field full">
-            <label for="firstDay">Preferred first service date <span class="opt">(optional)</span></label>
-            <input id="firstDay" name="firstDay" type="date">
-            <small class="opt">We'll do our best to match it and confirm the actual date by email.</small>
-          </div>
           <fieldset class="field full">
-            <legend class="legend">When we arrive, should we…</legend>
+            <legend class="legend">On your first service date, how would you like us to let you know we've arrived?</legend>
             <div class="choices four">
               <label class="choice"><input type="radio" name="arrival" value="Knock on the door"><span>Knock 🚪</span></label>
               <label class="choice"><input type="radio" name="arrival" value="Text when we arrive"><span>Text 📱</span></label>
@@ -409,8 +404,6 @@
       msg.className = 'msg err';
       msg.textContent = text;
     }
-    const tomorrow = new Date(Date.now() + 864e5);
-    form.firstDay.min = tomorrow.getFullYear() + '-' + String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' + String(tomorrow.getDate()).padStart(2, '0');
     form.addEventListener('input', e => e.target.closest('.field')?.classList.remove('invalid'));
 
     form.addEventListener('submit', e => {
@@ -422,7 +415,7 @@
       if (!/^\S+@\S+\.\S+$/.test(v('email'))) return fail(form.email, 'Please enter a valid email address.');
       if (v('phone').replace(/\D/g, '').length < 10) return fail(form.phone, 'Please enter a 10-digit phone number.');
       if (!serviceZips.has(v('zip'))) return fail(form.zip, `Sorry, we don't service ${v('zip')} yet. Email contact@dogpoopremovalnearyou.com and we'll let you know when we do.`);
-      if (!form.arrival.value) return fail(form.querySelector('input[name=arrival]'), 'Please choose how we should let you know we\'ve arrived.');
+      if (!form.arrival.value) return fail(form.querySelector('input[name=arrival]'), 'Please choose how we should let you know we\'ve arrived on your first service date.');
       if (!$('#agree').checked) return fail($('#agree'), 'Please check the box to continue.');
 
       const p = currentPlan();
@@ -440,8 +433,7 @@
         `Last cleaned: ${v('lastClean')}`,
         `Dogs during visits: ${v('dogsDuring')}`,
         `Gate / access: ${v('access')}`,
-        `Preferred first service date: ${v('firstDay') || 'No preference'}`,
-        `On arrival: ${form.arrival.value}`,
+        `First service arrival: ${form.arrival.value}`,
         `Heard about us: ${v('source') || 'Not given'}`,
         `Notes: ${v('notes') || 'None'}`
       ].join('\n');
@@ -467,7 +459,7 @@
         deodorize: p.deodorize ? 'yes' : 'no',
         address: `${v('street')}, ${v('city')} ${v('zip')}`,
         dog_info: v('dogInfo'), yard: v('yard'), last_cleaned: v('lastClean'), dogs_during: v('dogsDuring'), access: v('access'),
-        first_day: v('firstDay'), arrival: form.arrival.value, source: v('source'), notes: v('notes'),
+        arrival: form.arrival.value, source: v('source'), notes: v('notes'),
         message: details,
         // The existing EmailJS template shows {{estimate}}, so the full intake goes there too
         // and nothing is lost until the template is updated to show the new fields.
