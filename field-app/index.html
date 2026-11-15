@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#16211B" />
+    <title>Poop Savvy Field Service</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap"
+    />
+    <link rel="stylesheet" href="hark.css" />
+    <link rel="stylesheet" href="hark-hero.css" />
+    <style>
+      :root { --x-brand: #1B7A43; --x-dark: #16211B; }
+      body { margin: 0; background: var(--fill-primary-on); color: var(--text-primary); font-family: var(--sans); }
+      .x-app { max-width: 520px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+      .x-top { position: sticky; top: 0; z-index: 20; background: var(--x-dark); color: #fff; display: flex; align-items: center; gap: 10px; padding: 10px 14px; min-height: 56px; }
+      .x-top img { height: 34px; width: auto; }
+      .x-top b { font: var(--type-heading); flex: 1; }
+      .x-top .x-back { background: none; border: 0; color: #fff; font: var(--type-label); min-height: 48px; padding: 0 8px 0 0; cursor: pointer; }
+      .x-sync { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; max-width: 55%; padding: 0; background: none; border: 0; color: #b9c7bf; font: var(--type-caption); white-space: nowrap; cursor: pointer; }
+      .x-sync span { overflow: hidden; text-overflow: ellipsis; }
+      .x-dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+      .x-main { padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+      .x-tabs { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 520px; z-index: 20; display: flex; background: var(--x-dark); padding-bottom: env(safe-area-inset-bottom); }
+      .x-tabs button { flex: 1; min-height: 60px; background: none; border: 0; color: #b9c7bf; font: var(--type-label); cursor: pointer; border-top: 3px solid transparent; }
+      .x-tabs button[aria-current="page"] { color: #fff; border-top-color: #3fbf73; }
+      .x-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; padding: 0 14px; border-radius: var(--r-s); border: 1px solid var(--stroke-primary); background: var(--fill-primary-on); color: var(--text-primary); font: var(--type-label); text-decoration: none; cursor: pointer; }
+      .x-btn--go { background: var(--x-brand); border-color: var(--x-brand); color: #fff; }
+      .x-btn--bad { color: #b42318; border-color: #b42318; }
+      .x-row { display: flex; gap: 8px; flex-wrap: wrap; }
+      .x-row > * { flex: 1 1 0; }
+      .x-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .x-strip { display: flex; gap: 6px; align-items: center; }
+      .x-days { display: flex; gap: 6px; overflow-x: auto; flex: 1; scrollbar-width: none; }
+      .x-day { flex: 0 0 auto; min-height: 48px; min-width: 56px; border-radius: var(--r-s); border: 1px solid var(--stroke-secondary); background: var(--fill-tertiary); color: var(--text-primary); font: var(--type-small); cursor: pointer; line-height: 1.2; }
+      .x-day[aria-pressed="true"] { background: var(--x-brand); color: #fff; border-color: var(--x-brand); }
+      .x-arrow { min-width: 48px; min-height: 48px; border-radius: var(--r-s); border: 1px solid var(--stroke-primary); background: var(--fill-primary-on); color: var(--text-primary); font: var(--type-heading); cursor: pointer; }
+      .x-sum h2 { font: var(--type-heading); margin: 0; }
+      .x-sum p { margin: 2px 0 0; font: var(--type-small); color: var(--text-secondary); }
+      .x-card { background: var(--fill-tertiary); border-radius: var(--r-m); padding: 12px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; }
+      .x-card.is-done { opacity: .65; }
+      .x-card h3 { font: var(--type-heading); margin: 0; }
+      .x-line { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font: var(--type-small); color: var(--text-secondary); }
+      .x-num { width: 32px; height: 32px; border-radius: 50%; background: var(--x-dark); color: #fff; display: inline-grid; place-items: center; font: var(--type-label); flex: 0 0 auto; }
+      .x-pill { display: inline-block; padding: 3px 10px; border-radius: var(--r-pill); font: var(--type-tag); color: #fff; background: #5b6770; }
+      .x-st-on_the_way { background: #b25e09; } .x-st-arrived { background: #1f5fae; }
+      .x-st-complete { background: var(--x-brand); } .x-st-skipped { background: #8a2c2c; }
+      .x-gate { display: inline-block; padding: 3px 10px; border-radius: 8px; background: #fff3c4; color: #5a4300; font: var(--type-tag); font-family: ui-monospace, monospace; }
+      .x-flag { display: inline-block; padding: 3px 10px; border-radius: var(--r-pill); background: #b42318; color: #fff; font: var(--type-tag); }
+      .x-warn { background: #fdecc8; color: #5a3a00; border-left: 4px solid #d98a00; border-radius: 8px; padding: 8px 10px; font: var(--type-small); }
+      .x-big { font: var(--type-display); font-family: ui-monospace, monospace; letter-spacing: .08em; background: #fff3c4; color: #5a4300; border-radius: var(--r-m); padding: 10px 14px; text-align: center; }
+      .x-dl { margin: 0; display: grid; gap: 10px; }
+      .x-dl dt { font: var(--type-caption); color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; }
+      .x-dl dd { margin: 2px 0 0; font: var(--type-body); white-space: pre-wrap; }
+      .x-dl a { color: var(--x-brand); }
+      .x-h { font: var(--type-label); color: var(--text-secondary); margin: 6px 0 0; }
+      .x-input, .x-notes { width: 100%; min-height: 48px; border-radius: var(--r-s); border: 1px solid var(--stroke-primary); background: var(--fill-primary-on); color: var(--text-primary); font: var(--type-body); padding: 10px 12px; }
+      .x-notes { min-height: 96px; resize: vertical; }
+      .x-empty { color: var(--text-secondary); font: var(--type-body); text-align: center; padding: 28px 8px; }
+      .x-fine { font: var(--type-small); color: var(--text-secondary); }
+      .x-badge { display: inline-block; padding: 3px 10px; border-radius: var(--r-pill); font: var(--type-tag); background: #e3f1e8; color: #14532d; border: 1px solid var(--x-brand); }
+      .x-mini { min-width: 44px; min-height: 44px; border-radius: var(--r-s); border: 1px solid var(--stroke-primary); background: var(--fill-primary-on); color: var(--text-primary); font: var(--type-label); cursor: pointer; }
+      .x-mini:disabled { opacity: .35; cursor: default; }
+      .x-check { width: 26px; height: 26px; flex: 0 0 auto; border-radius: 7px; border: 2px solid var(--stroke-primary); background: var(--fill-primary-on); display: inline-grid; place-items: center; color: #fff; font: var(--type-label); }
+      .x-card.is-sel { outline: 2px solid var(--x-brand); }
+      .x-card.is-sel .x-check { background: var(--x-brand); border-color: var(--x-brand); }
+      .x-next { background: var(--x-dark); color: #fff; border-radius: var(--r-m); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+      .x-next p { margin: 0; font: var(--type-small); color: #b9c7bf; }
+      .x-next h3 { margin: 0; font: var(--type-title); }
+      .x-next .x-btn--go { min-height: 60px; font: var(--type-heading); }
+      .x-next .x-btn--ghost { background: transparent; color: #fff; border-color: #6f8a7b; }
+      .x-fab { position: fixed; z-index: 21; right: max(16px, calc(50% - 244px)); bottom: calc(76px + env(safe-area-inset-bottom)); width: 60px; height: 60px; border-radius: 50%; border: 0; background: var(--x-brand); color: #fff; font: 600 32px/1 var(--sans); box-shadow: var(--hark-shadow); cursor: pointer; }
+      .x-bar { position: fixed; z-index: 21; left: 50%; transform: translateX(-50%); width: 100%; max-width: 520px; bottom: calc(60px + env(safe-area-inset-bottom)); display: flex; gap: 8px; padding: 10px 14px; background: var(--fill-primary-on); border-top: 1px solid var(--stroke-primary); box-sizing: border-box; }
+      .x-bar .x-btn { flex: 1; }
+      .x-btn:disabled { opacity: .4; cursor: default; }
+      .x-form { display: flex; flex-direction: column; gap: 12px; }
+      .x-form label { display: flex; flex-direction: column; gap: 4px; font: var(--type-label); color: var(--text-secondary); }
+      .x-form .x-input, .x-form .x-notes { box-sizing: border-box; }
+      .x-err { color: #b42318; font: var(--type-small); margin: 0; }
+      .x-box { background: var(--fill-tertiary); border-radius: var(--r-m); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+      .x-box h3 { font: var(--type-heading); margin: 0; }
+      .x-box p { margin: 0; font: var(--type-body); }
+      .x-banner { display: flex; gap: 8px; align-items: center; background: #fdecc8; color: #5a3a00; border-radius: var(--r-s); padding: 6px 6px 6px 12px; font: var(--type-small); }
+      .x-banner span { flex: 1; }
+      .x-banner button { min-width: 44px; min-height: 44px; border: 0; background: none; color: inherit; font: var(--type-heading); cursor: pointer; }
+      .x-toast { position: fixed; z-index: 30; left: 50%; transform: translateX(-50%); bottom: calc(140px + env(safe-area-inset-bottom)); width: calc(100% - 28px); max-width: 490px; display: flex; align-items: center; gap: 10px; background: var(--x-dark); color: #fff; border-radius: var(--r-s); padding: 6px 6px 6px 14px; font: var(--type-body); box-shadow: var(--hark-shadow); box-sizing: border-box; }
+      .x-toast[hidden] { display: none; }
+      .x-sms { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .x-acts3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .x-acts3 .x-btn { min-height: 52px; padding: 0 6px; }
+      .x-sms a, .x-sms span { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 64px; padding: 4px 8px; border-radius: var(--r-s); color: #fff; font: var(--type-heading); line-height: 1.15; text-decoration: none; cursor: pointer; box-sizing: border-box; border: 2px solid transparent; }
+      .x-sms .x-s-on_the_way { background: #1f5fae; } .x-sms .x-s-arrived { background: #a35400; }
+      .x-sms .x-s-complete { background: var(--x-brand); } .x-sms .x-s-skipped { background: #b42318; }
+      .x-sms [aria-current="true"] { border-color: var(--text-primary); box-shadow: inset 0 0 0 2px #fff; }
+      .x-sms span[aria-disabled] { opacity: .4; cursor: default; }
+      .x-sms-note { font: var(--type-small); color: var(--text-secondary); margin: 0; }
+      .x-lock { position: fixed; inset: 0; z-index: 25; overflow: auto; background: var(--x-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 24px 16px; box-sizing: border-box; }
+      .x-lock img { height: 72px; width: auto; }
+      .x-lock__card { width: 100%; max-width: 360px; box-sizing: border-box; background: var(--fill-primary-on); border-radius: var(--r-l); padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+      .x-lock__card h1 { font: var(--type-heading); margin: 0 0 4px; text-align: center; }
+      .x-lock__card label { font: var(--type-label); color: var(--text-secondary); }
+      .x-lock__card .x-input { box-sizing: border-box; }
+      .x-lock__card .x-err:empty { display: none; }
+      .x-toast span { flex: 1; padding: 8px 0; }
+      .x-toast button { min-height: 44px; padding: 0 14px; border: 0; border-radius: var(--r-s); background: #3fbf73; color: var(--x-dark); font: var(--type-label); cursor: pointer; }
+    </style>
+  <meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1B7A43">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Poop Savvy">
+</head>
+  <body>
+    <div class="x-app" id="app"></div>
+    <script>
+      const SEED = {"business":{"name":"Poop Savvy","owners":"Josh & Dee Reed","city":"DeSoto, TX","phone":"972-388-8255","logo":"https://poop-savvy.com/assets/aistudio/logo_977ad608.png"}};
+    </script>
+    <script>
+      (function () {
+        "use strict";
+        var KEY = "ps-fs-v1";
+        var BIZ_PHONE = "972-388-8255";
+        var mem = {};
+        function storeGet(k) { try { var v = localStorage.getItem(k); return v == null ? mem[k] || null : v; } catch (e) { return mem[k] || null; } }
+        function storeSet(k, v) { mem[k] = v; try { localStorage.setItem(k, v); } catch (e) {} }
+
+        function storeDel(k) { delete mem[k]; try { localStorage.removeItem(k); } catch (e) {} }
+        function emptyState() { return { business: JSON.parse(JSON.stringify(SEED.business)), routeDays: {}, customers: [], jobs: [], leads: [] }; }
+        function load() {
+          try { var raw = storeGet(KEY); if (raw) { var s = JSON.parse(raw); if (s && s.customers && s.jobs) return s; } } catch (e) {}
+          return emptyState();
+        }
+        function fixState() {
+          S.customers = S.customers || []; S.jobs = S.jobs || []; S.leads = S.leads || []; S.routeDays = S.routeDays || {};
+          S.leads.forEach(function (l) { if (l && (l.id == null || l.id === "")) l.id = "lead-" + String(l.name || "").toLowerCase().replace(/[^a-z0-9]/g, "-"); });
+        }
+        var S = storeGet("ps-space") ? load() : emptyState();
+        fixState();
+        function save() { try { storeSet(KEY, JSON.stringify(S)); } catch (e) {} if (typeof scheduleSync === "function") scheduleSync(); }
+        var canStore = (function () { try { localStorage.setItem("ps-t", "1"); localStorage.removeItem("ps-t"); return true; } catch (e) { return false; } })();
+        function replaceState(n) {
+          Object.keys(S).forEach(function (k) { delete S[k]; });
+          Object.assign(S, JSON.parse(JSON.stringify(n)));
+          fixState();
+          ui.day = null; ui.panel = null; ui.sel = null; save();
+        }
+
+        // ===== Shared sync (Supabase) =====
+        var SYNC = { url: "https://thjotelpvxonkvkycsga.supabase.co/rest/v1/rpc/", key: "sb_publishable_z8tIJ6x1jMye2IsQ4pFQlA_dXXj6o_8", space: "" };
+        SYNC.space = storeGet("ps-space") || "";
+        var SK = "ps-fs-sync-v1";
+        var sy = (function(){ try { return JSON.parse(storeGet(SK) || "null"); } catch (e) { return null; } })() || { seq: 0, snap: {}, init: false };
+        var KINDS = ["customers", "jobs", "leads"];
+        var DEVICE = storeGet("ps-dev") || ("dev-" + Math.random().toString(36).slice(2, 8)); storeSet("ps-dev", DEVICE);
+        var syncState = { status: "connecting", at: null };
+        function rpc(fn, body) {
+          return fetch(SYNC.url + fn, { method: "POST", headers: { "apikey": SYNC.key, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+            .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+        }
+        function currentMap() {
+          var m = {};
+          KINDS.forEach(function (k) { (S[k] || []).forEach(function (x) { if (x && x.id != null) m[k + ":" + x.id] = JSON.stringify(x); }); });
+          m["meta:routeDays"] = JSON.stringify(S.routeDays || {});
+          return m;
+        }
+        function splitKey(k) { var p = k.indexOf(":"); return [k.slice(0, p), k.slice(p + 1)]; }
+        function diffLocal() {
+          var cur = currentMap(), out = [], now = Date.now();
+          Object.keys(cur).forEach(function (k) { if (sy.snap[k] !== cur[k]) { var s = splitKey(k); out.push({ kind: s[0], id: s[1], data: JSON.parse(cur[k]), deleted: false, updated_at: now }); } });
+          Object.keys(sy.snap).forEach(function (k) { if (!(k in cur)) { var s = splitKey(k); out.push({ kind: s[0], id: s[1], data: null, deleted: true, updated_at: now }); } });
+          return { cur: cur, out: out };
+        }
+        function applyRemote(recs) {
+          var changed = false;
+          recs.forEach(function (r) {
+            var k = r.kind + ":" + r.id;
+            if (r.kind === "meta") { if (r.id === "routeDays" && !r.deleted) { S.routeDays = r.data || {}; changed = true; } }
+            else if (KINDS.indexOf(r.kind) >= 0) {
+              var arr = S[r.kind] = S[r.kind] || [];
+              var i = -1; for (var j = 0; j < arr.length; j++) { if (String(arr[j].id) === String(r.id)) { i = j; break; } }
+              if (r.deleted) { if (i >= 0) { arr.splice(i, 1); changed = true; } }
+              else if (i >= 0) { if (JSON.stringify(arr[i]) !== JSON.stringify(r.data)) { arr[i] = r.data; changed = true; } }
+              else { arr.push(r.data); changed = true; }
+            } else return;
+            if (r.deleted) delete sy.snap[k]; else sy.snap[k] = JSON.stringify(r.data);
+          });
+          return changed;
+        }
+        var syncBusy = false, syncDirty = false, syncTimer = null;
+        function scheduleSync() { if (!SYNC.space) return; clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 800); }
+        function afterRemote(changed) {
+          if (!changed || !SYNC.space) return;
+          fixState();
+          try { storeSet(KEY, JSON.stringify(S)); } catch (e) {}
+          // if the open job/customer was deleted on another phone, close that panel
+          safeRerender();
+        }
+        function syncNow() {
+          if (!SYNC.space) return;
+          if (syncBusy) { syncDirty = true; return; }
+          syncBusy = true;
+          var first = sy.init ? Promise.resolve() : rpc("field_app_pull", { p_space: SYNC.space, p_since: 0 }).then(function (res) {
+            var recs = (res && res.records) || [];
+            if (recs.length) {
+              KINDS.forEach(function (k) { S[k] = []; });
+              sy.snap = {};
+              afterRemote(applyRemote(recs) || true);
+              sy.seq = res.max_seq || 0;
+            }
+            sy.init = true;
+          });
+          first.then(function () {
+            var d = diffLocal();
+            if (!d.out.length) return;
+            return rpc("field_app_push", { p_space: SYNC.space, p_records: d.out, p_device: DEVICE }).then(function () {
+              d.out.forEach(function (r) { var k = r.kind + ":" + r.id; if (r.deleted) delete sy.snap[k]; else sy.snap[k] = d.cur[k]; });
+            });
+          }).then(function () {
+            return rpc("field_app_pull", { p_space: SYNC.space, p_since: sy.seq });
+          }).then(function (res) {
+            afterRemote(applyRemote((res && res.records) || []));
+            sy.seq = Math.max(sy.seq, (res && res.max_seq) || 0);
+            if (SYNC.space) storeSet(SK, JSON.stringify(sy));
+            syncState = { status: "ok", at: new Date() }; syncUI();
+          }).catch(function () {
+            if (SYNC.space) storeSet(SK, JSON.stringify(sy));
+            syncState = { status: "offline", at: syncState.at }; syncUI();
+          }).then(function () {
+            syncBusy = false;
+            if (syncDirty) { syncDirty = false; setTimeout(syncNow, 300); }
+          });
+        }
+        var syncStarted = false;
+        function startSync() {
+          if (!syncStarted) {
+            syncStarted = true;
+            setInterval(function () { if (!document.hidden) syncNow(); }, 15000);
+            document.addEventListener("visibilitychange", function () { if (!document.hidden) syncNow(); });
+            window.addEventListener("online", syncNow);
+            window.addEventListener("focus", syncNow);
+          }
+          setTimeout(syncNow, 500);
+        }
+        if (SYNC.space) startSync();
+        // ===== end shared sync =====
+
+        // ===== Password lock =====
+        var SALT = "poop-savvy-field-v1|";
+        function utf8(str) {
+          if (typeof TextEncoder !== "undefined") return new TextEncoder().encode(str);
+          var s = unescape(encodeURIComponent(str)), a = new Uint8Array(s.length);
+          for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i);
+          return a;
+        }
+        function sha256js(msg) {
+          var K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+            0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+            0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+            0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+          var H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+          var l = msg.length, n = ((l + 9 + 63) >> 6) << 6, m = new Uint8Array(n), bits = l * 8, w = new Array(64), i, t;
+          m.set(msg); m[l] = 0x80;
+          var hi = Math.floor(bits / 4294967296), lo = bits >>> 0;
+          m[n - 8] = hi >>> 24; m[n - 7] = (hi >>> 16) & 255; m[n - 6] = (hi >>> 8) & 255; m[n - 5] = hi & 255;
+          m[n - 4] = lo >>> 24; m[n - 3] = (lo >>> 16) & 255; m[n - 2] = (lo >>> 8) & 255; m[n - 1] = lo & 255;
+          function rr(x, r) { return (x >>> r) | (x << (32 - r)); }
+          for (i = 0; i < n; i += 64) {
+            for (t = 0; t < 16; t++) w[t] = (m[i + 4 * t] << 24) | (m[i + 4 * t + 1] << 16) | (m[i + 4 * t + 2] << 8) | m[i + 4 * t + 3];
+            for (t = 16; t < 64; t++) {
+              var s0 = rr(w[t - 15], 7) ^ rr(w[t - 15], 18) ^ (w[t - 15] >>> 3), s1 = rr(w[t - 2], 17) ^ rr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
+              w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+            }
+            var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+            for (t = 0; t < 64; t++) {
+              var t1 = (h + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & f) ^ (~e & g)) + K[t] + w[t]) | 0;
+              var t2 = ((rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+              h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+            }
+            H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+            H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+          }
+          return H.map(function (v) { return ("00000000" + (v >>> 0).toString(16)).slice(-8); }).join("");
+        }
+        function toHex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); }
+        function derive(password) {
+          var bytes = utf8(SALT + password);
+          if (window.crypto && crypto.subtle && crypto.subtle.digest) {
+            return crypto.subtle.digest("SHA-256", bytes).then(toHex, function () { return sha256js(bytes); }).then(function (hex) { return "ps_" + hex; });
+          }
+          return Promise.resolve("ps_" + sha256js(bytes));
+        }
+        function showLock(msg) {
+          var b = SEED.business;
+          document.getElementById("app").innerHTML =
+            '<div class="x-lock"><img src="' + esc(b.logo) + '" alt="' + esc(b.name) + ' logo" /><div class="x-lock__card" id="x-lock">' +
+            "<h1>Poop Savvy Field Service</h1>" +
+            '<label for="x-pw">Password</label><input class="x-input" id="x-pw" type="password" autocomplete="current-password" required />' +
+            '<p class="x-err" id="x-lock-err" role="alert">' + (msg ? esc(msg) : "") + "</p>" +
+            '<button class="x-btn x-btn--go" type="button" id="x-unlock">Unlock</button></div></div>';
+          var pw = document.getElementById("x-pw"); if (pw) pw.focus();
+        }
+        function unlock(password) {
+          var err = document.getElementById("x-lock-err"), btn = document.getElementById("x-unlock"), pw = document.getElementById("x-pw");
+          if (err) err.textContent = "";
+          if (btn) { btn.disabled = true; btn.textContent = "Unlocking…"; }
+          function done(msg, clear) { if (err) err.textContent = msg; if (btn) { btn.disabled = false; btn.textContent = "Unlock"; } if (pw) { if (clear) pw.value = ""; pw.focus(); } }
+          var space;
+          derive(password).then(function (s) {
+            space = s;
+            return rpc("field_app_pull", { p_space: space, p_since: 0 });
+          }).then(function (res) {
+            var recs = (res && res.records) || [];
+            if (!recs.length) { done("Wrong password", true); return; }
+            storeSet("ps-space", space); SYNC.space = space;
+            sy = { seq: 0, snap: {}, init: false }; storeSet(SK, JSON.stringify(sy));
+            Object.keys(S).forEach(function (k) { delete S[k]; });
+            Object.assign(S, { business: SEED.business, routeDays: {}, customers: [], jobs: [], leads: [] });
+            KINDS.forEach(function (k) { S[k] = []; });
+            applyRemote(recs);
+            fixState();
+            sy.seq = res.max_seq || 0; sy.init = true; storeSet(SK, JSON.stringify(sy));
+            storeSet(KEY, JSON.stringify(S));
+            ui.tab = "route"; ui.day = null; ui.panel = null; ui.panelPrev = null; ui.sel = null; ui.q = "";
+            syncState = { status: "connecting", at: null };
+            render();
+            startSync();
+          }).catch(function () { done("Can't connect. Check signal and try again.", false); });
+        }
+        function lockPhone() {
+          SYNC.space = ""; clearTimeout(syncTimer);
+          storeDel("ps-space"); storeDel(KEY); storeDel(SK);
+          sy = { seq: 0, snap: {}, init: false };
+          Object.keys(S).forEach(function (k) { delete S[k]; });
+          Object.assign(S, emptyState());
+          ui.tab = "route"; ui.day = null; ui.panel = null; ui.panelPrev = null; ui.sel = null; ui.q = "";
+          showLock();
+        }
+        function tryUnlock() {
+          var pw = document.getElementById("x-pw"), btn = document.getElementById("x-unlock");
+          if (btn && btn.disabled) return;
+          if (!pw || !pw.value) { var er = document.getElementById("x-lock-err"); if (er) er.textContent = "Enter the password"; if (pw) pw.focus(); return; }
+          unlock(pw.value);
+        }
+        document.addEventListener("click", function (e) {
+          if (!e.target || !e.target.closest || !e.target.closest("#x-unlock")) return;
+          e.preventDefault();
+          tryUnlock();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (!e.target || e.target.id !== "x-pw" || e.key !== "Enter") return;
+          e.preventDefault();
+          tryUnlock();
+        });
+        // ===== end password lock =====
+
+        // Re-render after remote changes: close panels/selections pointing at records that are gone.
+        function safeRerender() {
+          try {
+            var p = ui.panel, closed = false;
+            if (p && p.id != null) {
+              if ((p.type === "job" && !job(p.id)) || ((p.type === "cust" || p.type === "custForm") && !cust(p.id))) { ui.panel = null; ui.panelPrev = null; closed = true; }
+            }
+            if (ui.panelPrev && ui.panelPrev.id != null && ((ui.panelPrev.type === "job" && !job(ui.panelPrev.id)) || (ui.panelPrev.type === "cust" && !cust(ui.panelPrev.id)))) ui.panelPrev = null;
+            if (ui.sel && ui.sel.ids) {
+              Object.keys(ui.sel.ids).forEach(function (id) { if (ui.sel.mode === "jobs" ? !job(id) : !cust(id)) delete ui.sel.ids[id]; });
+            }
+            // don't wipe what someone is typing; the next render picks up the new data
+            var a = document.activeElement;
+            if (!closed && a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.closest && a.closest("#app")) return;
+            if (!closed && ui.panel && (ui.panel.type === "custForm" || ui.panel.type === "jobForm")) return;
+            render();
+          } catch (e) {}
+        }
+        function syncLine() {
+          var st = syncState.status, txt, dot = "";
+          if (st === "ok") {
+            var d = syncState.at || new Date(), h = d.getHours();
+            txt = "Synced · " + ((h % 12) || 12) + ":" + pad(d.getMinutes()) + (h < 12 ? " AM" : " PM");
+            dot = '<i class="x-dot" style="background:#1B7A43"></i>';
+          } else if (st === "offline") { txt = "Offline · changes saved on this phone"; dot = '<i class="x-dot" style="background:#8a948f"></i>'; }
+          else txt = "Syncing…";
+          return dot + "<span>" + txt + "</span>";
+        }
+        function syncUI() {
+          var el = document.getElementById("x-sync");
+          if (el) el.innerHTML = syncLine();
+        }
+
+        // UI state; panel = null | {type:'job'|'cust'|'custForm'|'jobForm', id}; sel = null | {mode:'jobs'|'custs', ids:{}}
+        var ui = { tab: "route", day: null, panel: null, q: "", sel: null, banner: !canStore };
+
+        // ---------- toast ----------
+        var toastEl = document.createElement("div"), toastT = null, undoFn = null;
+        toastEl.className = "x-toast"; toastEl.hidden = true; toastEl.setAttribute("role", "status");
+        document.body.appendChild(toastEl);
+        function toast(msg, undo) {
+          undoFn = undo || null; clearTimeout(toastT);
+          toastEl.innerHTML = "<span>" + esc(msg) + "</span>" + (undo ? '<button data-act="undo">Undo</button>' : "");
+          toastEl.hidden = false;
+          toastT = setTimeout(function () { toastEl.hidden = true; undoFn = null; }, undo ? 5000 : 2600);
+        }
+
+        // ---------- helpers ----------
+        function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+        function enc(s) { return encodeURIComponent(s || ""); }
+        function digits(p) { return String(p || "").replace(/\D/g, ""); }
+        function pad(n) { return (n < 10 ? "0" : "") + n; }
+        function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+        function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+        function addDays(s, n) { var d = parse(s); d.setDate(d.getDate() + n); return iso(d); }
+        var WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        var MO = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        function wd(s) { return WD[parse(s).getDay()]; }
+        function nice(s) { var d = parse(s); return WD[d.getDay()] + ", " + MO[d.getMonth()] + " " + d.getDate(); }
+        function time12(t) { if (!t) return ""; var p = t.split(":"), h = +p[0]; return ((h % 12) || 12) + ":" + p[1] + (h < 12 ? " AM" : " PM"); }
+        function today() { return iso(new Date()); }
+        function cust(id) { for (var i = 0; i < S.customers.length; i++) if (S.customers[i].id === id) return S.customers[i]; return null; }
+        function job(id) { for (var i = 0; i < S.jobs.length; i++) if (S.jobs[i].id === id) return S.jobs[i]; return null; }
+        function jobsOn(d) { return S.jobs.filter(function (j) { return j.date === d; }).sort(function (a, b) { var oa = a.order == null ? 1e9 : a.order, ob = b.order == null ? 1e9 : b.order; return oa - ob || (a.time || "").localeCompare(b.time || ""); }); }
+        function isDone(j) { var s = normStatus(j.status); return s === "complete" || s === "skipped"; }
+        function isOneTime(j) { return /one.?time/i.test(j.type || ""); }
+        function filteredCusts() {
+          var q = ui.q.trim().toLowerCase();
+          return S.customers.filter(function (c) { return !q || [c.name, c.city, c.address, c.phone].join(" ").toLowerCase().indexOf(q) >= 0; })
+            .sort(function (a, b) { return a.name.localeCompare(b.name); });
+        }
+        function selIds() { return ui.sel ? Object.keys(ui.sel.ids) : []; }
+        function removeCustomers(ids) {
+          var t = today(), m = {}; ids.forEach(function (id) { m[id] = 1; });
+          var gone = { customers: S.customers.filter(function (c) { return m[c.id]; }), jobs: S.jobs.filter(function (j) { return m[j.customerId] && j.date >= t; }) };
+          S.customers = S.customers.filter(function (c) { return !m[c.id]; });
+          S.jobs = S.jobs.filter(function (j) { return !(m[j.customerId] && j.date >= t); });
+          save(); return gone;
+        }
+        function restore(gone) { S.customers = S.customers.concat(gone.customers || []); S.jobs = S.jobs.concat(gone.jobs || []); save(); }
+        function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+        function routeUrl(list) {
+          var a = list.map(function (j) { var c = cust(j.customerId); return c && c.address; }).filter(Boolean);
+          if (!a.length) return "";
+          var u = "https://www.google.com/maps/dir/?api=1&destination=" + enc(a[a.length - 1]);
+          if (a.length > 1) u += "&waypoints=" + a.slice(0, -1).map(enc).join("%7C");
+          return u + "&travelmode=driving";
+        }
+        function validState(d) {
+          if (!d || typeof d !== "object" || !Array.isArray(d.customers) || !Array.isArray(d.jobs)) return "Missing customers or jobs list.";
+          for (var i = 0; i < d.customers.length; i++) if (!d.customers[i] || !d.customers[i].id || !d.customers[i].name) return "A customer is missing an id or name.";
+          for (i = 0; i < d.jobs.length; i++) { var j = d.jobs[i]; if (!j || !j.id || !j.customerId || !/^\d{4}-\d{2}-\d{2}$/.test(j.date || "")) return "A job is missing an id, customer or date."; }
+          return "";
+        }
+        function doImport(text) {
+          var d; try { d = JSON.parse(text); } catch (e) { toast("That isn't valid JSON."); return; }
+          var err = validState(d); if (err) { toast("Import failed: " + err); return; }
+          if (!confirm("Replace all data on every phone with " + d.customers.length + " customers and " + d.jobs.length + " jobs?")) return;
+          replaceState(d); ui.tab = "route"; render(); toast("Data imported");
+        }
+        function jobDates() { var m = {}; S.jobs.forEach(function (j) { m[j.date] = 1; }); return Object.keys(m).sort(); }
+        function firstName(name) { var p = String(name || "").trim().split(/\s+/); if (/^dr\.?$/i.test(p[0]) && p.length > 1) p.shift(); return p[0] || "there"; }
+        function gmaps(a) { return "https://www.google.com/maps/dir/?api=1&destination=" + enc(a); }
+        function amaps(a) { return "https://maps.apple.com/?daddr=" + enc(a); }
+        function newId(prefix) { return (prefix || "id") + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+        var STATUS = { scheduled: "Scheduled", on_the_way: "On the way", arrived: "Arrived", complete: "Complete", skipped: "Skipped" };
+        function normStatus(s) { s = String(s || "scheduled").toLowerCase().replace(/\s+/g, "_"); return STATUS[s] ? s : "scheduled"; }
+        function pill(s) { s = normStatus(s); return '<span class="x-pill x-st-' + s + '">' + STATUS[s] + "</span>"; }
+        function flagBadge(c) { return c && c.flag ? '<span class="x-flag">⚑ ' + esc(c.flag) + "</span>" : ""; }
+        function gateBadge(c) { return c && c.gateCode ? '<span class="x-gate">Gate ' + esc(c.gateCode) + "</span>" : ""; }
+
+        var SMS = {
+          on_the_way: { label: "On the way", t: "Hi {first}, this is Poop Savvy. We're on the way to service your yard and should arrive shortly." },
+          arrived: { label: "Arrived", t: "Hi {first}, Poop Savvy has arrived and is starting your yard service now." },
+          complete: { label: "Complete", t: "Hi {first}, your yard service is complete! The gate is closed and latched, and we took a photo of the closed gate for your peace of mind. Thank you for choosing Poop Savvy!" },
+          skipped: { label: "Skipped", t: "Hi {first}, Poop Savvy wasn't able to service your yard today. Reply to this text and we'll get you rescheduled." },
+        };
+        function smsHref(c, key) { return "sms:" + digits(c.phone) + "?&body=" + enc(SMS[key].t.replace("{first}", firstName(c.name))); }
+        function smsButtons(j, c) {
+          var ph = digits(c.phone), cur = normStatus(j.status);
+          var btns = Object.keys(SMS).map(function (k) {
+            var cls = ' class="x-s-' + k + '"', mark = cur === k ? ' aria-current="true"' : "", lbl = (cur === k ? "✓ " : "") + SMS[k].label;
+            if (!ph) return "<span" + cls + ' aria-disabled="true" data-act="noop">' + SMS[k].label + "</span>";
+            return "<a" + cls + mark + ' data-act="status" data-id="' + esc(j.id) + '" data-v="' + k + '" href="' + smsHref(c, k) + '" target="_blank" rel="noopener">' + lbl + "</a>";
+          }).join("");
+          return '<div class="x-sms" role="group" aria-label="Text customer and set status">' + btns + "</div>" + (ph ? "" : '<p class="x-sms-note">No phone</p>');
+        }
+
+        function defaultDay() {
+          var t = today(), ds = jobDates();
+          if (ds.indexOf(t) >= 0) return t;
+          for (var i = 0; i < ds.length; i++) if (ds[i] > t) return ds[i];
+          return ds.length ? ds[ds.length - 1] : t;
+        }
+
+        // ---------- actions (pass 2 adds more here) ----------
+        var actions = {
+          tab: function (el) { ui.tab = el.dataset.v; ui.panel = null; ui.sel = null; window.scrollTo(0, 0); },
+          back: function () { ui.panel = ui.panelPrev || null; ui.panelPrev = null; },
+          day: function (el) { ui.day = el.dataset.v; ui.sel = null; },
+          prev: function () { ui.day = addDays(ui.day, -1); ui.sel = null; },
+          next: function () { ui.day = addDays(ui.day, 1); ui.sel = null; },
+          today: function () { ui.day = today(); ui.sel = null; },
+          openJob: function (el) { ui.panelPrev = ui.panel; ui.panel = { type: "job", id: el.dataset.v }; window.scrollTo(0, 0); },
+          openCust: function (el) { ui.panelPrev = null; ui.panel = { type: "cust", id: el.dataset.v }; window.scrollTo(0, 0); },
+          status: function (el) { var j = job(el.dataset.id); if (j) { j.status = el.dataset.v; save(); toast("Marked " + STATUS[normStatus(el.dataset.v)]); } return "defer"; },
+          noop: function () { return false; },
+          delJob: function (el) {
+            if (!confirm("Delete this job?")) return false;
+            var gone = S.jobs.filter(function (j) { return j.id === el.dataset.v; });
+            S.jobs = S.jobs.filter(function (j) { return j.id !== el.dataset.v; }); save(); ui.panel = ui.panelPrev || null; ui.panelPrev = null;
+            toast("Job deleted", function () { restore({ jobs: gone }); });
+          },
+          undo: function () { var f = undoFn; undoFn = null; toastEl.hidden = true; if (f) { f(); toast("Restored"); } },
+          // customer form
+          addCust: function () { ui.panelPrev = ui.panel; ui.panel = { type: "custForm" }; window.scrollTo(0, 0); },
+          editCust: function (el) { ui.panelPrev = ui.panel; ui.panel = { type: "custForm", id: el.dataset.v }; window.scrollTo(0, 0); },
+          saveCust: function () {
+            var p = ui.panel, name = val("f-name");
+            if (!name) { var e = document.getElementById("f-err"); e.hidden = false; document.getElementById("f-name").focus(); return false; }
+            var c = p.id ? cust(p.id) : { id: newId("c"), flag: "", accessNotes: "" };
+            ["name", "phone", "email", "address", "city", "dogs", "frequency", "gateCode", "gateNotes", "instructions", "notes"].forEach(function (k) { c[k] = val("f-" + k); });
+            if (!p.id) S.customers.push(c);
+            if (p.lead != null) S.leads.splice(p.lead, 1);
+            save(); ui.panelPrev = null; ui.panel = { type: "cust", id: c.id }; window.scrollTo(0, 0);
+            toast(p.id ? "Customer saved" : "Customer added");
+          },
+          delCust: function (el) {
+            var c = cust(el.dataset.v); if (!c) return false;
+            if (!confirm("Delete " + c.name + "? Their upcoming jobs will be deleted too.")) return false;
+            var gone = removeCustomers([c.id]); ui.panel = null; ui.panelPrev = null; ui.tab = "customers";
+            toast(c.name + " deleted", function () { restore(gone); });
+          },
+          convertLead: function (el) {
+            var l = S.leads[+el.dataset.v]; if (!l) return false;
+            ui.panelPrev = null; ui.panel = { type: "custForm", lead: +el.dataset.v, prefill: { name: l.name, city: l.city, frequency: "One-time", notes: l.note } }; window.scrollTo(0, 0);
+          },
+          // one-time job
+          addJob: function (el) { ui.panelPrev = ui.panel; ui.panel = { type: "jobForm", customerId: el.dataset.v || "" }; window.scrollTo(0, 0); },
+          saveJob: function () {
+            var cid = val("j-cust"), err = document.getElementById("j-err"), date = val("j-date");
+            function fail(m) { err.textContent = m; err.hidden = false; return false; }
+            if (!cid) return fail("Choose a customer or add a new one.");
+            if (!date) return fail("Pick a date.");
+            if (cid === "__new") {
+              var name = val("j-name"); if (!name) return fail("Enter the new customer's name.");
+              var addr = val("j-addr"), c = { id: newId("c"), name: name, phone: val("j-phone"), email: "", address: addr, city: (addr.split(",")[1] || "").trim(), dogs: "", frequency: "One-time", gateCode: "", gateNotes: "", accessNotes: "", instructions: "", notes: "", flag: "" };
+              S.customers.push(c); cid = c.id;
+            }
+            S.jobs.push({ id: newId("j"), customerId: cid, date: date, time: val("j-time"), status: "scheduled", type: "one-time", warning: "", notes: val("j-notes") });
+            save(); ui.panel = null; ui.panelPrev = null; ui.tab = "route"; ui.day = date; window.scrollTo(0, 0);
+            toast("One-time job added");
+          },
+          // edit job
+          saveJobEdit: function (el) {
+            var j = job(el.dataset.v); if (!j) return false;
+            var d = val("e-date"); if (!d) { toast("Pick a date."); return false; }
+            if (d !== j.date) delete j.order;
+            j.date = d; j.time = val("e-time"); j.status = val("e-status"); save(); toast("Job updated");
+          },
+          resetJob: function (el) { var j = job(el.dataset.v); if (j) { j.status = "scheduled"; save(); toast("Reset to scheduled"); } },
+          // reorder
+          move: function (el) {
+            var list = jobsOn(ui.day), i = list.findIndex(function (j) { return j.id === el.dataset.v; }), k = i + (+el.dataset.d);
+            if (i < 0 || k < 0 || k >= list.length) return false;
+            var t = list[i]; list[i] = list[k]; list[k] = t;
+            list.forEach(function (j, n) { j.order = n; }); save();
+          },
+          // bulk
+          selMode: function (el) { ui.sel = ui.sel ? null : { mode: el.dataset.v, ids: {} }; },
+          sel: function (el) { var id = el.dataset.v; if (ui.sel.ids[id]) delete ui.sel.ids[id]; else ui.sel.ids[id] = 1; },
+          selAll: function () {
+            var all = ui.sel.mode === "jobs" ? jobsOn(ui.day) : filteredCusts(), on = selIds().length < all.length;
+            ui.sel.ids = {}; if (on) all.forEach(function (x) { ui.sel.ids[x.id] = 1; });
+          },
+          bulkDel: function () {
+            var ids = selIds(), n = ids.length; if (!n) return false;
+            if (ui.sel.mode === "jobs") {
+              if (!confirm("Delete " + n + " job" + (n > 1 ? "s" : "") + "?")) return false;
+              S.jobs = S.jobs.filter(function (j) { return !ui.sel.ids[j.id]; }); save();
+            } else {
+              if (!confirm("Delete " + n + " customer" + (n > 1 ? "s" : "") + " and their upcoming jobs?")) return false;
+              removeCustomers(ids);
+            }
+            ui.sel = null; toast(n + " deleted");
+          },
+          bulkStatus: function (el) {
+            var ids = selIds(); if (!ids.length) return false;
+            ids.forEach(function (id) { var j = job(id); if (j) j.status = el.dataset.v; });
+            save(); ui.sel = null; toast(ids.length + " marked " + STATUS[el.dataset.v]);
+          },
+          // more tab
+          hideBanner: function () { ui.banner = false; },
+          exportJson: function () {
+            var txt = JSON.stringify(S, null, 2);
+            try {
+              var url = URL.createObjectURL(new Blob([txt], { type: "application/json" })), a = document.createElement("a");
+              a.href = url; a.download = "poop-savvy-" + today() + ".json"; document.body.appendChild(a); a.click(); a.remove();
+              setTimeout(function () { URL.revokeObjectURL(url); }, 1000); toast("Backup downloaded");
+            } catch (e) { actions.copyJson(); }
+            return false;
+          },
+          copyJson: function () {
+            var txt = JSON.stringify(S, null, 2), box = document.getElementById("x-paste");
+            function manual() { if (box) { box.value = txt; box.focus(); box.select(); } toast("Copy the text in the box below"); }
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast("Backup copied to clipboard"); }, manual);
+            else manual();
+            return false;
+          },
+          importPaste: function () { var t = val("x-paste"); if (!t) { toast("Paste a backup first."); return false; } doImport(t); return false; },
+          resetData: function () {
+            if (!confirm("Reset to the calendar data? This replaces the route on every phone.")) return false;
+            rpc("field_app_pull", { p_space: SYNC.space + ":seed", p_since: 0 }).then(function (res) {
+              var r = res && res.records && res.records[0], d = r && r.data;
+              if (!d) throw new Error("empty");
+              replaceState(Object.assign({ business: SEED.business }, d)); ui.tab = "route"; render(); toast("Reset to calendar data");
+            }).catch(function () { toast("Couldn't load calendar data"); });
+            return false;
+          },
+          lockPhone: function () {
+            if (!confirm("Lock this phone? You'll need the password to open the app again.")) return false;
+            lockPhone(); return false;
+          },
+          syncStatus: function () { syncNow(); return false; },
+          syncNowBtn: function () {
+            var before = syncState.at, t0 = Date.now();
+            syncState = { status: "connecting", at: syncState.at }; syncUI();
+            syncNow();
+            (function wait() {
+              if ((syncState.status !== "connecting" && !syncBusy) || Date.now() - t0 > 20000) {
+                toast(syncState.status === "ok" ? "Synced" : "Couldn't reach sync, saved on this phone");
+                return;
+              }
+              setTimeout(wait, 250);
+            })();
+            return false;
+          },
+        };
+
+        document.addEventListener("click", function (e) {
+          var el = e.target.closest("[data-act]");
+          if (!el) return;
+          if (el.tagName === "A" && el.dataset.act !== "status") return; // plain links pass through
+          if (el.tagName !== "A") e.preventDefault();
+          e.stopPropagation();
+          if (el.dataset.act === "status") {
+            // let the sms: navigation fire first; only open it ourselves if something blocked the default
+            if (e.defaultPrevented) { try { window.open(el.getAttribute("href"), "_blank"); } catch (err) {} }
+            var sj = job(el.dataset.id); if (sj) { sj.status = el.dataset.v; save(); }
+            setTimeout(function () { toast("Marked " + STATUS[normStatus(el.dataset.v)]); render(); }, 400);
+            return;
+          }
+          var fn = actions[el.dataset.act];
+          if (!fn) return;
+          var r = fn(el, e);
+          if (r === false) return;
+          if (r === "defer") setTimeout(render, 300); else render();
+        });
+        document.addEventListener("input", function (e) {
+          var el = e.target;
+          if (el.id === "x-q") { ui.q = el.value; var list = document.getElementById("x-clist"); if (list) list.innerHTML = custList(); }
+          if (el.dataset.note) { var j = job(el.dataset.note); if (j) { j.notes = el.value; save(); } }
+          if (el.id === "j-q") { var s = document.getElementById("j-cust"), cur = s.value; s.innerHTML = custOptions(el.value, cur); if (!s.value) { var f = s.querySelector("option[data-c]"); if (f) s.value = f.value; } newToggle(); }
+        });
+        function newToggle() { var s = document.getElementById("j-cust"), b = document.getElementById("j-new"); if (s && b) b.hidden = s.value !== "__new"; }
+        document.addEventListener("change", function (e) {
+          var el = e.target;
+          if (el.id === "j-cust") newToggle();
+          if (el.id === "x-file" && el.files && el.files[0]) {
+            var r = new FileReader(); r.onload = function () { doImport(String(r.result)); el.value = ""; }; r.readAsText(el.files[0]);
+          }
+        });
+        function custOptions(q, cur) {
+          q = String(q || "").trim().toLowerCase();
+          return '<option value="">Choose a customer…</option><option value="__new"' + (cur === "__new" ? " selected" : "") + ">+ New customer</option>" +
+            S.customers.slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).filter(function (c) { return !q || (c.name + " " + c.city + " " + c.address).toLowerCase().indexOf(q) >= 0; })
+              .map(function (c) { return '<option data-c value="' + esc(c.id) + '"' + (c.id === cur ? " selected" : "") + ">" + esc(c.name) + (c.city ? " · " + esc(c.city) : "") + "</option>"; }).join("");
+        }
+
+        // ---------- views ----------
+        function header() {
+          var back = ui.panel ? '<button class="x-back" data-act="back" aria-label="Back">‹ Back</button>' : "";
+          return '<header class="x-top">' + back +
+            '<img src="https://poop-savvy.com/assets/aistudio/logo_977ad608.png" alt="" onerror="this.style.display=\'none\'" />' +
+            "<b>Poop Savvy</b>" +
+            '<button class="x-sync" id="x-sync" data-act="syncStatus" aria-live="polite" aria-label="Sync status, tap to sync now">' + syncLine() + "</button></header>";
+        }
+        function tabs() {
+          return '<nav class="x-tabs" aria-label="Sections">' + [["route", "Route"], ["customers", "Customers"], ["more", "More"]].map(function (t) {
+            return '<button data-act="tab" data-v="' + t[0] + '"' + (ui.tab === t[0] ? ' aria-current="page"' : "") + ">" + t[1] + "</button>";
+          }).join("") + "</nav>";
+        }
+
+        function routeView() {
+          if (!ui.day) ui.day = defaultDay();
+          var ds = jobDates(), list = jobsOn(ui.day);
+          var done = list.filter(function (j) { var s = normStatus(j.status); return s === "complete" || s === "skipped"; }).length;
+          var strip = '<div class="x-strip"><button class="x-arrow" data-act="prev" aria-label="Previous day">‹</button><div class="x-days" id="x-days">' +
+            ds.map(function (d) { var p = parse(d); return '<button class="x-day" data-act="day" data-v="' + d + '" aria-pressed="' + (d === ui.day) + '">' + WD[p.getDay()] + "<br><b>" + MO[p.getMonth()] + " " + p.getDate() + "</b></button>"; }).join("") +
+            '</div><button class="x-arrow" data-act="next" aria-label="Next day">›</button></div>';
+          var label = S.routeDays[wd(ui.day)] || "";
+          var sum = '<div class="x-row" style="align-items:center"><div class="x-sum" style="flex:3"><h2>' + nice(ui.day) + (ui.day === today() ? " · Today" : "") + "</h2>" +
+            (label ? "<p>" + esc(label) + "</p>" : "") + "<p>" + done + " of " + list.length + ' done</p></div><button class="x-btn" style="flex:0 0 auto" data-act="today">Today</button></div>';
+          var left = list.filter(function (j) { return !isDone(j); }), nx = left[0], nc = nx && (cust(nx.customerId) || { name: "Unknown customer" });
+          var next = nx && !ui.sel ? '<section class="x-next" aria-label="Next stop"><p>Next stop · ' + (list.indexOf(nx) + 1) + " of " + list.length + (nx.time ? " · " + time12(nx.time) : "") + "</p>" +
+            '<h3 data-act="openJob" data-v="' + esc(nx.id) + '" style="cursor:pointer">' + esc(nc.name) + "</h3>" + (nc.address ? "<p>" + esc(nc.address) + "</p>" : "") +
+            '<div class="x-line">' + gateBadge(nc) + " " + flagBadge(nc) + "</div>" +
+            (nc.address ? '<a class="x-btn x-btn--go" target="_blank" rel="noopener" href="' + gmaps(nc.address) + '">Navigate</a>' : "") +
+            (routeUrl(left) ? '<a class="x-btn x-btn--ghost" target="_blank" rel="noopener" href="' + routeUrl(left) + '">Start route in Google Maps (' + left.length + " stop" + (left.length > 1 ? "s" : "") + ")</a>" : "") + "</section>" : "";
+          var tools = list.length ? '<div class="x-row">' + selTools("jobs", list.length) + "</div>" : "";
+          var cards = list.length ? list.map(function (j, i) { return jobCard(j, i + 1, list.length); }).join("") : '<p class="x-empty">No stops on this day.</p>';
+          return strip + sum + next + tools + cards + (ui.sel ? selBar() : '<button class="x-fab" data-act="addJob" aria-label="Add one-time job">+</button>');
+        }
+        function selTools(mode, total) {
+          if (!ui.sel) return '<button class="x-btn" data-act="selMode" data-v="' + mode + '">Select</button>';
+          return '<button class="x-btn" data-act="selAll">' + (selIds().length < total ? "Select all" : "Clear all") + '</button><button class="x-btn x-btn--go" data-act="selMode">Done</button>';
+        }
+        function selBar() {
+          var n = selIds().length, dis = n ? "" : " disabled";
+          return '<div style="height:64px"></div><div class="x-bar" role="toolbar" aria-label="Selected items">' +
+            (ui.sel.mode === "jobs" ? '<button class="x-btn x-btn--go" data-act="bulkStatus" data-v="complete"' + dis + ">Complete (" + n + ')</button><button class="x-btn" data-act="bulkStatus" data-v="skipped"' + dis + ">Skip (" + n + ")</button>" : "") +
+            '<button class="x-btn x-btn--bad" data-act="bulkDel"' + dis + ">Delete (" + n + ")</button></div>";
+        }
+        function selBox(id) { return ui.sel ? '<span class="x-check" aria-hidden="true">' + (ui.sel.ids[id] ? "✓" : "") + "</span>" : ""; }
+        function cardAttrs(kind, id) {
+          var on = ui.sel && ui.sel.ids[id];
+          return ui.sel ? ' data-act="sel" data-v="' + esc(id) + '" role="checkbox" tabindex="0" aria-checked="' + !!on + '"' + (on ? ' data-sel="1"' : "") : ' data-act="' + kind + '" data-v="' + esc(id) + '"';
+        }
+        function jobCard(j, n, total) {
+          var c = cust(j.customerId) || { name: "Unknown customer" }, s = normStatus(j.status), on = ui.sel && ui.sel.ids[j.id];
+          var arrows = ui.sel ? "" : '<button class="x-mini" data-act="move" data-d="-1" data-v="' + esc(j.id) + '" aria-label="Move up"' + (n === 1 ? " disabled" : "") + '>↑</button><button class="x-mini" data-act="move" data-d="1" data-v="' + esc(j.id) + '" aria-label="Move down"' + (n === total ? " disabled" : "") + ">↓</button>";
+          return '<article class="x-card' + (isDone(j) ? " is-done" : "") + (on ? " is-sel" : "") + '"' + cardAttrs("openJob", j.id) + ">" +
+            '<div class="x-line">' + selBox(j.id) + '<span class="x-num">' + n + '</span><h3 style="flex:1">' + esc(c.name) + "</h3>" + pill(s) + "</div>" +
+            '<div class="x-line">' + [esc(c.city), time12(j.time), esc(c.dogs)].filter(Boolean).join(" · ") + " " + (isOneTime(j) ? '<span class="x-badge">One-time</span> ' : "") + gateBadge(c) + " " + flagBadge(c) + "</div>" +
+            (j.warning ? '<div class="x-warn">⚠ ' + esc(j.warning) + "</div>" : "") +
+            (ui.sel ? "" : '<div class="x-row" style="align-items:center">' + (c.address ? '<a class="x-btn x-btn--go" data-act="link" target="_blank" rel="noopener" href="' + gmaps(c.address) + '">Navigate</a>' : "<span></span>") +
+              (digits(c.phone) ? '<a class="x-btn" data-act="link" target="_blank" rel="noopener" href="tel:' + digits(c.phone) + '">Call</a>' : "") + '<span style="flex:0 0 auto;display:flex;gap:6px">' + arrows + "</span></div>") +
+            "</article>";
+        }
+
+        function field(label, v, html) { return v ? "<div><dt>" + label + "</dt><dd>" + (html ? v : esc(v)) + "</dd></div>" : ""; }
+
+        function jobView(j) {
+          if (!j) return '<p class="x-empty">Job not found.</p>';
+          var c = cust(j.customerId) || { name: "Unknown customer" }, ph = digits(c.phone);
+          var out = '<div class="x-line"><h2 style="font:var(--type-title);margin:0;flex:1;color:var(--text-primary)">' + esc(c.name) + "</h2>" + pill(j.status) + "</div>" +
+            '<div class="x-line">' + nice(j.date) + (j.time ? " · " + time12(j.time) : "") + (j.type ? " · " + esc(j.type) : "") + " " + flagBadge(c) + "</div>";
+          out += '<div><p class="x-h" style="margin:0 0 6px">Text customer and set status</p>' + smsButtons(j, c) + "</div>";
+          out += '<div class="x-acts3">' +
+            (c.address ? '<a class="x-btn" target="_blank" rel="noopener" href="' + gmaps(c.address) + '">Navigate</a><a class="x-btn" target="_blank" rel="noopener" href="' + amaps(c.address) + '">Apple Maps</a>' : '<span class="x-btn" aria-disabled="true" style="opacity:.4">Navigate</span><span class="x-btn" aria-disabled="true" style="opacity:.4">Apple Maps</span>') +
+            (ph ? '<a class="x-btn" target="_blank" rel="noopener" href="tel:' + ph + '">Call</a>' : '<span class="x-btn" aria-disabled="true" style="opacity:.4">Call</span>') + "</div>";
+          if (j.warning) out += '<div class="x-warn">⚠ ' + esc(j.warning) + "</div>";
+          if (c.gateCode) out += '<div><p class="x-h">Gate code</p><div class="x-big">' + esc(c.gateCode) + "</div></div>";
+          out += '<dl class="x-dl">' + custFields(c) + "</dl>";
+          out += '<label><p class="x-h">Job notes</p><textarea class="x-notes" data-note="' + esc(j.id) + '" placeholder="Add notes for this visit">' + esc(j.notes) + "</textarea></label>";
+          out += '<div class="x-box x-form"><h3>Edit job</h3><div class="x-grid2"><label>Date<input class="x-input" id="e-date" type="date" value="' + esc(j.date) + '" /></label>' +
+            '<label>Time<input class="x-input" id="e-time" type="time" value="' + esc(j.time) + '" /></label></div>' +
+            '<label>Status<select class="x-input" id="e-status">' + Object.keys(STATUS).map(function (k) { return '<option value="' + k + '"' + (normStatus(j.status) === k ? " selected" : "") + ">" + STATUS[k] + "</option>"; }).join("") + "</select></label>" +
+            '<div class="x-grid2"><button class="x-btn x-btn--go" data-act="saveJobEdit" data-v="' + esc(j.id) + '">Save changes</button><button class="x-btn" data-act="resetJob" data-v="' + esc(j.id) + '">Reset to scheduled</button></div></div>';
+          out += '<button class="x-btn x-btn--bad" data-act="delJob" data-v="' + esc(j.id) + '">Delete job</button>';
+          return out;
+        }
+        function custFields(c) {
+          return field("Address", c.address) + field("Phone", c.phone) +
+            field("Email", c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + "</a>" : "", true) +
+            field("Dogs", c.dogs) + field("Frequency", c.frequency) + field("Gate notes", c.gateNotes) + field("Access notes", c.accessNotes) +
+            field("Instructions", c.instructions) + field("Notes", c.notes) + field("Flag", c.flag);
+        }
+
+        function custList() {
+          var list = filteredCusts();
+          if (!list.length) return '<p class="x-empty">No customers match.</p>';
+          return list.map(function (c) {
+            return '<article class="x-card' + (ui.sel && ui.sel.ids[c.id] ? " is-sel" : "") + '"' + cardAttrs("openCust", c.id) + '><div class="x-line">' + selBox(c.id) + '<h3 style="flex:1">' + esc(c.name) + '</h3></div><div class="x-line">' +
+              [esc(c.city), esc(c.frequency)].filter(Boolean).join(" · ") + " " + flagBadge(c) + "</div></article>";
+          }).join("");
+        }
+        function customersView() {
+          return '<button class="x-btn x-btn--go" data-act="addCust">+ Add customer</button>' +
+            '<input class="x-input" id="x-q" type="search" placeholder="Search name, city, address, phone" value="' + esc(ui.q) + '" aria-label="Search customers" />' +
+            '<div class="x-row" style="align-items:center"><p class="x-fine" style="flex:1;margin:0">' + S.customers.length + " customers</p>" + (S.customers.length ? selTools("custs", filteredCusts().length).replace(/class="x-btn/g, 'style="flex:0 0 auto" class="x-btn') : "") + "</div>" +
+            '<div id="x-clist" style="display:flex;flex-direction:column;gap:10px">' + custList() + "</div>" + (ui.sel ? selBar() : "");
+        }
+        var FREQ = ["Weekly", "Every Other Week", "Twice Monthly", "One-time", "Other"];
+        function custForm(p) {
+          var c = p.id ? cust(p.id) : p.prefill || {};
+          if (p.id && !c) return '<p class="x-empty">Customer not found.</p>';
+          var f = c.frequency || "", opts = FREQ.slice(); if (f && opts.indexOf(f) < 0) opts.unshift(f);
+          function inp(k, label, type, extra) { return "<label>" + label + '<input class="x-input" id="f-' + k + '" type="' + (type || "text") + '" value="' + esc(c[k]) + '"' + (extra || "") + " /></label>"; }
+          function ta(k, label) { return "<label>" + label + '<textarea class="x-notes" id="f-' + k + '">' + esc(c[k]) + "</textarea></label>"; }
+          return '<h2 style="font:var(--type-title);margin:0">' + (p.id ? "Edit customer" : "Add customer") + '</h2><div class="x-form">' +
+            inp("name", "Name *", "text", ' required autocomplete="name"') + '<p class="x-err" id="f-err" hidden>Name is required.</p>' +
+            inp("phone", "Phone", "tel") + inp("email", "Email", "email") + inp("address", "Address") +
+            '<div class="x-grid2">' + inp("city", "City") + inp("dogs", "Dogs") + "</div>" +
+            '<label>Frequency<select class="x-input" id="f-frequency"><option value="">Not set</option>' + opts.map(function (o) { return "<option" + (o === f ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select></label>" +
+            inp("gateCode", "Gate code") + ta("gateNotes", "Gate / access notes") + ta("instructions", "Instructions") + ta("notes", "Notes") +
+            '<div class="x-grid2"><button class="x-btn" data-act="back">Cancel</button><button class="x-btn x-btn--go" data-act="saveCust">' + (p.id ? "Save" : "Add customer") + "</button></div></div>";
+        }
+        function jobForm(p) {
+          return '<h2 style="font:var(--type-title);margin:0">Add one-time job</h2><div class="x-form">' +
+            '<label>Find customer<input class="x-input" id="j-q" type="search" placeholder="Type a name or city" /></label>' +
+            '<label>Customer<select class="x-input" id="j-cust">' + custOptions("", p.customerId) + "</select></label>" +
+            '<div class="x-box" id="j-new" hidden><h3>New customer</h3><label>Name *<input class="x-input" id="j-name" /></label><label>Phone<input class="x-input" id="j-phone" type="tel" /></label><label>Address<input class="x-input" id="j-addr" placeholder="Street, City, TX ZIP" /></label></div>' +
+            '<div class="x-grid2"><label>Date<input class="x-input" id="j-date" type="date" value="' + esc(ui.day || today()) + '" /></label><label>Time<input class="x-input" id="j-time" type="time" /></label></div>' +
+            '<label>Notes<textarea class="x-notes" id="j-notes"></textarea></label><p class="x-err" id="j-err" hidden></p>' +
+            '<div class="x-grid2"><button class="x-btn" data-act="back">Cancel</button><button class="x-btn x-btn--go" data-act="saveJob">Add job</button></div></div>';
+        }
+        function custView(c) {
+          if (!c) return '<p class="x-empty">Customer not found.</p>';
+          var ph = digits(c.phone), t = today();
+          var up = S.jobs.filter(function (j) { return j.customerId === c.id && j.date >= t; }).sort(function (a, b) { return (a.date + a.time).localeCompare(b.date + b.time); });
+          var out = '<div class="x-line"><h2 style="font:var(--type-title);margin:0;flex:1;color:var(--text-primary)">' + esc(c.name) + "</h2>" + flagBadge(c) + "</div>";
+          if (c.gateCode) out += '<div><p class="x-h">Gate code</p><div class="x-big">' + esc(c.gateCode) + "</div></div>";
+          out += '<div class="x-grid2">' +
+            (ph ? '<a class="x-btn x-btn--go" target="_blank" rel="noopener" href="tel:' + ph + '">Call</a><a class="x-btn" target="_blank" rel="noopener" href="sms:' + ph + '">Text</a>' : "") +
+            (c.email ? '<a class="x-btn" href="mailto:' + esc(c.email) + '">Email</a>' : "") +
+            (c.address ? '<a class="x-btn" target="_blank" rel="noopener" href="' + gmaps(c.address) + '">Navigate</a>' : "") + "</div>";
+          out += '<dl class="x-dl">' + custFields(c) + "</dl>";
+          out += '<p class="x-h">Upcoming jobs</p>' + (up.length ? up.map(function (j) {
+            return '<article class="x-card" data-act="openJob" data-v="' + esc(j.id) + '"><div class="x-line"><b style="flex:1;color:var(--text-primary)">' + nice(j.date) + (j.time ? " · " + time12(j.time) : "") + "</b>" + pill(j.status) + "</div>" +
+              (j.warning ? '<div class="x-warn">⚠ ' + esc(j.warning) + "</div>" : "") + "</article>";
+          }).join("") : '<p class="x-fine">No upcoming jobs.</p>');
+          out += '<button class="x-btn x-btn--go" data-act="addJob" data-v="' + esc(c.id) + '">Add one-time job</button>' +
+            '<div class="x-grid2"><button class="x-btn" data-act="editCust" data-v="' + esc(c.id) + '">Edit customer</button><button class="x-btn x-btn--bad" data-act="delCust" data-v="' + esc(c.id) + '">Delete customer</button></div>';
+          return out;
+        }
+
+        function moreView() {
+          var b = S.business || SEED.business;
+          var leads = '<div class="x-box"><h3>Leads</h3>' + (S.leads.length ? S.leads.map(function (l, i) {
+            return '<div class="x-card" style="background:var(--fill-primary-on);cursor:default"><div class="x-line"><b style="flex:1;color:var(--text-primary)">' + esc(l.name) + "</b>" + esc(l.city) + "</div>" +
+              (l.note ? '<p class="x-fine" style="margin:0">' + esc(l.note) + "</p>" : "") + '<button class="x-btn" data-act="convertLead" data-v="' + i + '">Convert to customer</button></div>';
+          }).join("") : '<p class="x-fine">No open leads.</p>') + "</div>";
+          var data = '<div class="x-box"><h3>Backup</h3><div class="x-grid2"><button class="x-btn x-btn--go" data-act="exportJson">Export JSON</button><button class="x-btn" data-act="copyJson">Copy JSON</button></div>' +
+            '<label class="x-btn" style="cursor:pointer">Import JSON file<input id="x-file" type="file" accept="application/json,.json" style="position:absolute;opacity:0;width:1px;height:1px" /></label>' +
+            '<textarea class="x-notes" id="x-paste" placeholder="Or paste a backup here" aria-label="Paste backup JSON"></textarea><button class="x-btn" data-act="importPaste">Import pasted JSON</button>' +
+            '<button class="x-btn x-btn--bad" data-act="resetData">Reset to calendar data</button></div>';
+          var biz = '<div class="x-box"><h3>' + esc(b.name) + "</h3><p>" + esc(b.owners) + "</p><p>" + esc(b.city) + '</p><a class="x-btn" target="_blank" rel="noopener" href="tel:' + digits(b.phone) + '">' + esc(b.phone) + "</a></div>";
+          var sync = '<div class="x-box"><h3>Sync</h3><p>All phones using this app share the same route, customers and job statuses. Updates appear on other phones within about 15 seconds.</p><button class="x-btn x-btn--go" data-act="syncNowBtn">Sync now</button><button class="x-btn" data-act="lockPhone">Lock this phone</button></div>';
+          return leads + sync + data + biz + '<p class="x-fine" style="text-align:center">Changes sync across all phones running this app. They don\'t sync back to Google Calendar.</p>';
+        }
+
+        var views = { route: routeView, customers: customersView, more: moreView };
+        var panels = { job: function (p) { return jobView(job(p.id)); }, cust: function (p) { return custView(cust(p.id)); }, custForm: custForm, jobForm: jobForm };
+
+        function render() {
+          var body = ui.panel ? panels[ui.panel.type](ui.panel) : views[ui.tab]();
+          var banner = ui.banner ? '<div class="x-banner" role="note"><span>Changes won\'t be saved in this preview. Use Export to back up.</span><button data-act="hideBanner" aria-label="Dismiss">×</button></div>' : "";
+          document.getElementById("app").innerHTML = header() + '<main class="x-main">' + banner + body + "</main>" + tabs();
+          var sel = document.querySelector('.x-day[aria-pressed="true"]');
+          if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: "nearest", inline: "center" });
+        }
+
+        document.addEventListener("keydown", function (e) {
+          var el = e.target;
+          if ((e.key === "Enter" || e.key === " ") && el.getAttribute && el.getAttribute("role") === "checkbox" && el.dataset.act) { e.preventDefault(); el.click(); }
+        });
+
+        window.PS = { S: S, ui: ui, save: save, render: render, actions: actions, views: views, panels: panels, newId: newId, toast: toast };
+        if (SYNC.space) render(); else showLock();
+      })();
+    </script>
+    <script src="hark.js"></script>
+  <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js")});}</script>
+</body>
+</html>
